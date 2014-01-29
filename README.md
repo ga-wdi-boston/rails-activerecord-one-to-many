@@ -20,7 +20,7 @@ From the browser, you should be able to:
 - View a single user, and on that page see the titles and truncated body of all of their articles. There should be a 'New Article' button on this page, which allows you to create a new Article as if you were that user.
 - Your root route should show a listing of all articles (with the most recent at the top), with their title, number of comments, author's name, and a short snippet of the body. From here, you should be able to click on an author and view their Show page, or click on the title of the Article and view the entire Article and its comments
 - Anyone should be able to leave comments on an Article anonymously. These comments are visible on the Show page of that article. Comments cannot be deleted or edited once created.
-- You should be able to edit an Article
+- You should be able to edit an Article. Just edit the title/body and don't worry about changing the user ever. 
 - Use *nested routes* where appropriate for helping create new articles and similar.
 
 Think about the following potential URLs which you may find inspiring...
