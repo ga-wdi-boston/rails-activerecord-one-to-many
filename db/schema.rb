@@ -17,8 +17,10 @@ ActiveRecord::Schema.define(version: 20140129163034) do
   enable_extension "plpgsql"
 
   create_table "albums", force: true do |t|
-    t.text    "name"
-    t.integer "artist_id"
+    t.text     "name"
+    t.integer  "artist_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "albums", ["artist_id"], name: "index_albums_on_artist_id", using: :btree
