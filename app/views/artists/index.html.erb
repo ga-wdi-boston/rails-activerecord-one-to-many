@@ -4,12 +4,18 @@
   <div class="artist">
     <h2><%= artist.name %></h2>
     <%= artist.albums.count %> albums
-    <ul class="albums">
+    <div class="albums">
       <% artist.albums.each do |album| %>
-        <li><%= album.name %></li>
+        <h3><%= album.name %></h3>
+        <div class="tracks">
+          <% album.songs.each do |song| %>
+            <div class="track">
+              <%= song.name %>, <%= song.length %>
+            </div>
+          <% end %>
+        </div>
       <% end %>
-    </ul>
+    </div>
     <%= link_to "Add Album", new_album_path %>
-
   </div>
 <% end %>
