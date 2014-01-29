@@ -1,4 +1,4 @@
-# Multi-User
+# Multi-Author Publication with Comments
 
 ## Setup
 
@@ -22,6 +22,11 @@ From the browser, you should be able to:
 - Anyone should be able to leave comments on an Article anonymously. These comments are visible on the Show page of that article. Comments cannot be deleted or edited once created.
 - You should be able to edit an Article
 - Use *nested routes* where appropriate for helping create new articles and similar.
+
+Think about the following potential URLs which you may find inspiring...
+
+* `POST http://localhost:3000/authors/4/articles/16/comments`
+* `GET http://localhost:3000/authors/2/articles/new`
 
 **Do not attempt to implement user login**
 
