@@ -3,6 +3,7 @@ class ArtistsController < ApplicationController
   end
 
   def index
+    @artists = Artist.all
   end
 
   def create
