@@ -6,6 +6,10 @@ gem 'rails', '4.0.2'
 # Use postgresql as the database for Active Record
 gem 'pg'
 
+group :development do
+  gem "rails-erd", github: 'bshelton229/rails-erd', branch: 'mavericks'
+end
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

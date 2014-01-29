@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/bshelton229/rails-erd.git
+  revision: 5cd4e5d4b86520eae5f9d8845ffb214ee92e9d92
+  branch: mavericks
+  specs:
+    rails-erd (1.1.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      choice (~> 0.1.6)
+      ruby-graphviz (~> 1.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,6 +39,7 @@ GEM
     arel (4.0.1)
     atomic (1.1.14)
     builder (3.1.4)
+    choice (0.1.6)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -73,6 +85,7 @@ GEM
     rake (10.1.1)
     rdoc (4.1.1)
       json (~> 1.4)
+    ruby-graphviz (1.0.9)
     sass (3.2.14)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -113,6 +126,7 @@ DEPENDENCIES
   jquery-rails
   pg
   rails (= 4.0.2)
+  rails-erd!
   sass-rails (~> 4.0.0)
   sdoc
   turbolinks
