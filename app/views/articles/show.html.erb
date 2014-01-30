@@ -4,3 +4,9 @@
 <p><%= link_to 'Edit this article', edit_user_article_path(@article.user, @article) %></p>
 
 <p><%= @article.body %></p>
+
+<h2>Comments</h2>
+
+<% @article.comments.each do |comment| %>
+  <p><%= comment.created_at %> &ndash; <%= comment.body %></p>
+<% end %>
