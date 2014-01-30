@@ -1,4 +1,6 @@
 <h1><%= @article.title %></h1>
 <h2>by <%= @article.user.name %></h2>
 
+<p><%= link_to 'Edit this article', edit_user_article_path(@article.user, @article) %></p>
+
 <p><%= @article.body %></p>

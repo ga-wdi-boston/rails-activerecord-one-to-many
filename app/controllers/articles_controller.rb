@@ -24,6 +24,17 @@ class ArticlesController < ApplicationController
     redirect_to [user, article]
   end
 
+  def edit
+    @user = User.find(params[:user_id])
+    @article = Article.find(params[:id])
+  end
+
+  def update
+    article = Article.find(params[:id])
+    article.update!(article_params)
+    redirect_to [article.user, article]
+  end
+
   private
 
   def article_params
