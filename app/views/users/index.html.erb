@@ -1,0 +1,8 @@
+<h1>All Users</h1>
+
+<dl>
+  <% @users.each do |user| %>
+    <dt><%= user.name %></dt>
+    <dd><%= user.email %></dd>
+  <% end %>
+</dl>
