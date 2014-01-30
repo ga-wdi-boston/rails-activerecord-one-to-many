@@ -1,4 +1,7 @@
 class ArticlesController < ApplicationController
+  before_action :find_user, only: [:new, :create, :edit, :update]
+  before_action :find_article, only: [:show, :edit, :update]
+
   def index
     if params[:user_id].present?
       @user = User.find(params[:user_id])
@@ -9,33 +12,35 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.find(params[:id])
   end
 
   def new
-    @user = User.find(params[:user_id])
     @article = @user.articles.new
   end
 
   def create
-    user = User.find(params[:user_id])
     article = Article.create!(article_params)
-    user.articles << article
-    redirect_to [user, article]
+    @user.articles << article
+    redirect_to [@user, article]
   end
 
   def edit
-    @user = User.find(params[:user_id])
-    @article = Article.find(params[:id])
   end
 
   def update
-    article = Article.find(params[:id])
-    article.update!(article_params)
-    redirect_to [article.user, article]
+    @article.update!(article_params)
+    redirect_to [@user, @article]
   end
 
   private
+
+  def find_user
+    @user = User.find(params[:user_id])
+  end
+
+  def find_article
+    @article = Article.find(params[:id])
+  end
 
   def article_params
     params.require(:article).permit(:title, :body)
