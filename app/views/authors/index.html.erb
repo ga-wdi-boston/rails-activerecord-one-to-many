@@ -1,0 +1,13 @@
+<h1>All Authors
+  <% if @book %>
+    for <%= @book.name %>
+  <% end %>
+</h1>
+
+<% @authors.each do |author| %>
+  <div class='author'><%= link_to author.name, author %></div>
+<% end %>
+
+
+<br>
+<%= link_to "Create New Author", new_author_path %>

@@ -1,0 +1,11 @@
+<h1>Book: <%= @book.name %></h1>
+
+<h2>This book was authored by:<h2>
+<ul>
+  <% @book.authors.each do |author| %>
+    <li><%= link_to author.name, author %></li>
+  <% end %>
+</ul>
+
+
+<%= link_to "Edit Book", edit_book_path(@book) %>

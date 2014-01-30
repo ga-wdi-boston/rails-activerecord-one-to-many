@@ -1,0 +1,12 @@
+<h1>All Books
+  <% if @author %>
+    by <%= @author.name %>
+  <% end %>
+</h1>
+
+<% @books.each do |book| %>
+  <div class='book'><%= link_to book.name, book %></div>
+<% end %>
+
+<br>
+<%= link_to "Create New Book", new_book_path %>
