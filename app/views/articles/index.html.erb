@@ -7,10 +7,10 @@
 
 <% @articles.each do |article| %>
   <article>
-    <h2><%= article.title %></h2>
+    <h2><%= link_to article.title, [article.user, article] %></h2>
     <% if @user.blank? %>
       <p>Author: <%= article.user.name %></p>
     <% end %>
-    <p><%= article.body %></p>
+    <p><%= truncate(article.body, length: 120) %></p>
   </article>
 <% end %>
