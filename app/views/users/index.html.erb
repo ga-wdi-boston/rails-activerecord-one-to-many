@@ -1,8 +1,10 @@
 <h1>All Users</h1>
 
+<%= link_to 'Create new user', new_user_path %>
+
 <dl>
   <% @users.each do |user| %>
-    <dt><%= user.name %></dt>
+    <dt><%= link_to user.name, user %></dt>
     <dd><%= user.email %></dd>
   <% end %>
 </dl>
