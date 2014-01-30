@@ -1,5 +1,6 @@
 <% if @user.present? %>
   <h1>Articles by <%= @user.name %></h1>
+  <%= link_to 'Create new article', new_user_article_path(@user) %>
 <% else %>
   <h1>All Articles</h1>
 <% end %>
