@@ -1,0 +1,6 @@
+<h1>Commenting on <%= @article.title %></h1>
+
+<%= form_for [@user, @article, @comment] do |form| %>
+  <%= form.text_field :body, placeholder: 'Insert comment here' %>
+  <%= form.submit %>
+<% end %>
