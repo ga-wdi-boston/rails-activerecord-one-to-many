@@ -1,8 +1,15 @@
-<h1>All Articles</h1>
+<% if @user.present? %>
+  <h1>Articles by <%= @user.name %></h1>
+<% else %>
+  <h1>All Articles</h1>
+<% end %>
 
 <% @articles.each do |article| %>
   <article>
     <h2><%= article.title %></h2>
+    <% if @user.blank? %>
+      <p>Author: <%= article.user.name %></p>
+    <% end %>
     <p><%= article.body %></p>
   </article>
 <% end %>

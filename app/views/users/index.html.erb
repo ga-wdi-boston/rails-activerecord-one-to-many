@@ -4,7 +4,7 @@
 
 <dl>
   <% @users.each do |user| %>
-    <dt><%= link_to user.name, user %></dt>
+    <dt><%= link_to user.name, user_articles_path(user) %></dt>
     <dd><%= user.email %></dd>
   <% end %>
 </dl>
