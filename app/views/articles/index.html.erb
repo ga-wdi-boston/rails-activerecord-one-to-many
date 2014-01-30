@@ -9,7 +9,7 @@
   <article>
     <h2><%= link_to article.title, [article.user, article] %></h2>
     <% if @user.blank? %>
-      <p>Author: <%= article.user.name %></p>
+      <p>Author: <%= link_to article.user.name, user_articles_path(article.user) %></p>
     <% end %>
     <p><%= truncate(article.body, length: 120) %></p>
   </article>
