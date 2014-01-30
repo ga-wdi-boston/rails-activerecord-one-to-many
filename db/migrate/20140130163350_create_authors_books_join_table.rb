@@ -8,6 +8,7 @@ class CreateAuthorsBooksJoinTable < ActiveRecord::Migration
 end
 
 # Alternate syntax
+# Doesn't create indexes
 # class CreateAuthorsBooksJoinTable < ActiveRecord::Migration
 #   def change
 #     create_table :authors_books, id: false do |t|
