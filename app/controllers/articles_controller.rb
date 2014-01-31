@@ -2,6 +2,8 @@ class ArticlesController < ApplicationController
   before_action :find_user, only: [:new, :create, :edit, :update]
   before_action :find_article, only: [:show, :edit, :update]
 
+  skip_before_action :authenticate_admin!, only: [:index]
+
   def index
     if params[:user_id].present?
       @user = User.find(params[:user_id])
