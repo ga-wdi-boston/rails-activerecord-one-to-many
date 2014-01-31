@@ -12,6 +12,10 @@ group :development do
   gem "rails-erd", github: 'bshelton229/rails-erd', branch: 'mavericks'
 end
 
+group :production do
+  gem 'rails_12factor'
+end
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
