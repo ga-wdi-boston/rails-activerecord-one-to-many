@@ -1,0 +1,87 @@
+Create an app that will be used by a company that manages a venue,
+Boston Garden, Madison Square Garden, to keep track of Events being
+held. 
+
+Initially, we have one "User" account that will manage all Events and
+the tickets being sold for that event. We may add user
+registration and login and multiple user accounts. Where each account
+my have certain priviledges. Some of these could be change status,
+sell tickets, etc.
+
+Events have a doortime (time admission will occur) , a duration
+(hours), a status (draft, scheduled, cancelled).  We will be able
+to CRUD Events.
+
+
+We can sell tickets to events. Tickets will have a seat number and
+price.
+
+(Instructor create resource)
+
+* Each Concert has many, purchased, t
+ickets. 
+(Draw a diagram btw concerts and tickets.)
+
+Tickets can only belong to ONE concert.
+
+* Parent child relationship.
+Concert is the parent
+Ticket is the child
+       
+* How to store these in a DB?
+
+* Maybe we could add all the tickets to the concert's  table. As a column 
+in the concerts table. A new column for each new ticket?
+
+(Diagram this adding ticket columns to the concert table. )
+Why not?
+
+Need to create a new column for each ticket. And probably a new column
+for each attribute of a ticket.
+
+ticket_1_price, ticket_1_flight_num, ticket_1_purchased_on, ... , ticket_2_price, ...
+
+But, we want a concert to have an unbounded num of tickets.
+
+* Lets create a new Ticket table/model.
+And, somehow, connect each Ticket to a Concert.
+(Draw the Ticket and Concert Table)
+
+Each row in the Ticket table will get a reference, or fk, to the concert.
+Name of this column will be concert_id.
+
+* Well need a Ticket controller and nested routes for tickets.
+And a form to ONLY SELECT pre-populated tickets.
+Ticket will have a start point, destination, price, datetime and flight num (no airline for now).
+These tickets have been already seeded.
+
+* rails g resource Ticket flight_num:integer price:decimal flight_time:datetime, start:string dest:string
+
+* migrate and Seed tickets.
+
+* goto rails console.
+
+* show the user_id, it's a fk.
+
+* Add a belongs_to :user
+NOTE: the single form user.
+
+* The belongs_to :user
+creates a set of getters/setters for the related user.
+
+* Create a ticket.
+Just the attributes, other than user.
+
+t = Ticket.new(...)
+t = User.find_by_name('Tom')
+t.save  # saved to DB
+
+Look at t and see it has an pk id and a fk for user tom.
+Look at SQL that was run. (Still in console)
+
+
+
+
+
+
+
