@@ -231,7 +231,7 @@ In a assoc_books git branch. Create a has_many, parent, relationship from the Au
 ## Lab
 Add validations.  
 
-Add a genre to the Album. Also albums must have a name and the genre must be either Rock, Rap, Country, Jazz or Ska. 
+Add a genre to the Album. Also albums must have a name and the genre must be either rock, rap, country, jazz or ska. 
 
 Songs must have a title, artist, duration (greater than 60 seconds). No price is required.
 
