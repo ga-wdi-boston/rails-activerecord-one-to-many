@@ -155,27 +155,50 @@ Devise can manage the registration of users. Which types of features an applicat
 	</thead>
 	<tbody>
 	<tr>
-		<td>cancel_user_registration</td><td>GET</td><td>/users/cancel(.:format)</td><td>devise/registrations#cancel
+		<td>cancel_user_registration</td>
+		<td>GET</td><td>/users/cancel(.:format)</td>
+		<td>devise/registrations#cancel
 		</td>
 	</tr>
 
 	<tr>
-		<td>user_registration</td><td>POST</td><td>/users(.:format)</td><td>devise/registrations#create
-		</td>
+		<td>user_registration</td><td>POST</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#create</td>
 	</tr>
 
 	<tr>
-		<td>new_user_registration</td><td>GET</td><td>/users/sign_up(.:format)</td><td>devise/registrations#new
-		</td>
+		<td>new_user_registration</td>
+		<td>GET</td>
+		<td>/users/sign_up(.:format)</td>
+		<td>devise/registrations#new</td>
 	</tr>
 
-<tr><td>edit_user_registration</td><td>GET</td><td>/users/edit(.:format)</td><td>devise/registrations#edit</td></tr>
+	<tr>
+		<td>edit_user_registration</td>
+		<td>GET</td><td>/users/edit(.:format)</td>
+		<td>devise/registrations#edit</td>
+	</tr>
 
-<tr><td></td><td>PATCH</td><td>/users(.:format)</td><td>devise/registrations#update</td></tr>
+	<tr>
+		<td></td>
+		<td>PATCH</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#update</td>
+	</tr>
 
-<tr><td></td><td>PUT</td><td>/users(.:format)</td><td>devise/registrations#update</td></tr>
+	<tr>
+		<td></td>
+		<td>PUT</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#update</td>
+	</tr>
 
-<tr><td></td><td>DELETE</td><td>/users(.:format)</td><td>devise/registrations#destroy</td></tr>
+	<tr>
+		<td></td>
+		<td>DELETE</td>
+		<td>/users(.:format)</td><td>devise/registrations#destroy</td>
+	</tr>
 </tbody>
 </table>
 
@@ -188,7 +211,8 @@ Devise can manage the registration of users. Which types of features an applicat
 ## Add login/logout links to Layout  
 
 ```
- <% if user_signed_in? %>
+ <div>
+     <% if user_signed_in? %>
       Logged in as <strong><%= current_user.email %></strong>.
       <%= link_to 'Edit profile', edit_user_registration_path %> |
       <%= link_to "Logout", destroy_user_session_path, method: :delete %>
@@ -196,7 +220,7 @@ Devise can manage the registration of users. Which types of features an applicat
       <%= link_to "Sign up", new_user_registration_path %> |
       <%= link_to "Login", new_user_session_path %>
     <% end %>
-  </div>
+ </div>
 ```
 
 
