@@ -296,8 +296,32 @@ In app/views/albums/show.html.erb
  </p>
 ```
 
+## Before Filter
+
+Lets add a before_action method the songs controller. This will use one private controller method to get the album for each song. 
+
+In the app/controllers/songs_controller.rb
+
+```
+before_action :set_album, only: [:index, :show]
+
+...
+
+private 
+  def set_album
+    @album = Album.find(params[:album_id])  
+  end
+  
+```
+
+Read more about [before filters](http://guides.rubyonrails.org/action_controller_overview.html#filters).
 
 
+## Lab
+
+In a assoc_books git branch. Create a Book route, controller, index and show actions and views.
+
+Make Book a nested route of Author and use a before action in the books controller.
 
 
 
