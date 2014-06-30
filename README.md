@@ -324,6 +324,13 @@ In a assoc_books git branch. Create a Book route, controller, index and show act
 Make Book a nested route of Author and use a before action in the books controller.
 
 
+## Nested Route Forms
+
+#### Create a song in an album.
+
+#### Update a song in an album.
+
+#### Delete a song from an album.
 
   
 
