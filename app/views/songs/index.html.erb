@@ -1,0 +1,31 @@
+<h3> Songs <h3>
+  <dl>
+<% @songs.each do |song| %>
+      <dt>
+        Name
+      </dt>
+      <dd>
+        <%= link_to song.title, song_path(song) %>
+      </dd>
+      <dt>
+        Artist
+      </dt>
+      <dd>
+        <%= song.artist %>
+      </dd>
+      <dt>
+        Duration
+      </dt>
+      <dd>
+        <%= song.duration %>
+      </dd>
+      <dt>
+        Price
+      </dt>
+      <dd>
+        <%= song.price %>
+      </dd>
+
+
+<% end %>
+</dl>

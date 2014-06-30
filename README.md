@@ -239,11 +239,11 @@ Songs must have a title, artist, duration (greater than 60 seconds). No price is
 In a assoc_books git branch. Authors must have a name. Book must have a title.
 
 
+## Nested Resources
 
 
-
-
-
+* Create a Songs controller with a route, index action and view.  
+* 
 
 
 
