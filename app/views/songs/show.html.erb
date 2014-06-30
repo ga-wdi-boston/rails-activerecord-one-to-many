@@ -7,3 +7,7 @@
   <br>
     Price <%= @song.price %>
 </p>
+
+<p>
+  <%= link_to "#{@album.name} Songs", album_songs_path(@album) %>
+</p>

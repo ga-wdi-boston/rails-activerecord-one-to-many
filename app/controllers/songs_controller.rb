@@ -33,13 +33,21 @@ class SongsController < ApplicationController
   end 
 
   def edit
+    @song = @album.songs.find(params[:id])
   end
 
   def update
+    @song = @album.songs.find(params[:id])
+    if @song.update(song_params)
+      redirect_to album_songs_path(@album, @song), notice: "You have updated the #{@song.title}"
+    else
+      render :edit
+    end
   end
 
   def destroy
   end
+  
   private
 
   def set_album
