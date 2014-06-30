@@ -1,14 +1,14 @@
 Album.delete_all
+Song.delete_all
 
-nevermind = Album.create(name: "Nevermind")
 sea_change = Album.create(name: "Sea Change")
+sea_change.songs.create!(title: 'Golden Age', artist: "Beck", price: 1.99, duration: 215)
+sea_change.songs.create!(title: 'Lost Cause', artist: "Beck", price: 4.99, duration: 182)
+sea_change.songs.create!(title: 'Lonesome Tears', artist: "Beck", price: 2.99, duration: 156)
 
-# nevermind.songs << Song.create(title: "Smells like Teen Spirit")
-# nevermind.songs << Song.create(title "In Bloom")
-# nevermind.songs << Song.create(title "Lithium")
-
-# sea_change.songs << Song.create(title: "Golden Age"
-# sea_change.songs << Song.create(title "Lost Cause")
-# sea_change.songs << Song.create(title "Lonesome Tears")
+# Create the album
+nevermind = Album.create(name: 'Nevermind')
+nevermind.songs.create!(title: 'Lithium', artist: 'Nirvana', duration: 193, price: 1.99)
+nevermind.songs.create!(title: 'Come as you are', artist: 'Nirvana', duration: 177, price: 1.49)
 
 
