@@ -2,4 +2,6 @@
   Album is <%= @album.name %>
   <br>
   Genre is <%= @album.genre %>
+  <!-- a link to show all of the songs for this album -->
+  <%= link_to 'Songs', album_songs_path(@album.id)%>
 </p>

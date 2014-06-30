@@ -1,13 +1,24 @@
 class SongsController < ApplicationController
 
-  # GET /songs
+  # Get run before the actions
+  before_action :set_album
+
+  # GET /albums/:album_id/songs
   def index
-    @songs = Song.all 
+    @songs = @album.songs
   end
 
   # GET /songs/:id
   def show
-    @song = Song.find(params[:id])
+    # ONLY look in this album for songs with 
+    # the id in the params.
+    @song = @album.songs.find(params[:id])
   end
 
+  private
+
+  def set_album
+    @album = Album.find(params[:album_id])
+  end
+  
 end

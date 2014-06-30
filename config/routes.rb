@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
 
-  resources :albums, only: [:index, :show]
+  # Parent resource
+  resources :albums, only: [:index, :show] do 
+    # The URLs for songs indicate which album 
+    # the song is in. 
+    # Child resource
+    resources :songs, only: [:index, :show]    
 
-  resources :songs, only: [:index, :show]
-
+    # Look at rake routes, http://localhost:3000/rails/info/routes
+  end
+  
   # Set the root route .
   # This will be the controller/action that gets 
   # called when you enter '/'
