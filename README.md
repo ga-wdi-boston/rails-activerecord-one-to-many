@@ -262,6 +262,41 @@ def index
 end	
 ```
 
+Now if you go to localhost:3000/songs?album_id=1 you will see ONLY the songs that belong to, are scoped to, the first album.
+
+We would like to always show songs that belong to a particular album. And we want to use a better way to identify the _context_ or album in the URL. 
+
+```
+localhost:3000/albums/1/songs
+```
+
+We can do this by adding a __nested route__.
+
+In the config/routes.rb file.  
+
+```
+resources :albums, only: [:index, :show] do
+    # All songs require a nested route.
+    resources :songs, only: [:index, :show]
+end
+```
+
+And look at our routes, http://localhost:3000/rails/info/routes. Notice all routes for songs are scoped to an album.
+
+
+We will have to change show path helpers in our views.
+
+Add a link to the album show page to show all the songs.
+
+In app/views/albums/show.html.erb  
+
+```
+ <p>
+   <%= link_to('Songs', album_songs_path(@album) )%>   
+ </p>
+```
+
+
 
 
 

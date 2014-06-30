@@ -1,11 +1,11 @@
-<h3> Songs <h3>
+<h3> Songs for <%= link_to @album.name, album_path(@album) %><h3>
   <dl>
 <% @songs.each do |song| %>
       <dt>
         Name
       </dt>
       <dd>
-        <%= link_to song.title, song_path(song) %>
+        <%= link_to song.title, album_song_path(@album, song) %>
       </dd>
       <dt>
         Artist
