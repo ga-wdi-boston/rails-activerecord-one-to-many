@@ -1,6 +1,9 @@
 class Album < ActiveRecord::Base
 
-  has_many :songs
+  # dependent: :destroy - Will destroy, or remove, all child objects
+  # in memory and in the the DB.
+  has_many :songs, dependent: :destroy
+
   # has_many :all_album_songs, class_name: :songs
 
   # # Get all this albums songs.
