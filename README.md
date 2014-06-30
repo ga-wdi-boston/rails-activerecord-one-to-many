@@ -241,9 +241,28 @@ In a assoc_books git branch. Authors must have a name. Book must have a title.
 
 ## Nested Resources
 
+* Create a couple more songs to another album and seed DB.
 
-* Create a Songs controller with a route, index action and view.  
-* 
+```
+nevermind = Album.create(name: 'Nevermind', genre: 'rock')
+nevermind.songs.new(title: 'Lithium', artist: 'Nirvana', price: 3.99, duration: 198)
+nevermind.songs.new(title: 'Smells Like Teen Spirit', artist: 'Nirvana', price: 3.99, duration: 198)
+
+```
+* Create a Songs controller with a route, index and show actions with views.  
+
+The problem here is that we are showing all the songs. We want to show __ONLY__ the songs for each album.
+
+* Lets try add a URL parameter to get find only the songs for a specific album.
+
+``` 
+def index
+  @album = Album.find(params[:album_id])  
+  @songs = @album.songs
+end	
+```
+
+
 
 
 
