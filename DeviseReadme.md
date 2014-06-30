@@ -80,15 +80,31 @@ In this case confirmation and lockout features of Devise are not being used. But
 #### Lets Look at the User model.
 We're using a couple of devise modules. See Devise Modules below.	
 #### Look at the routes.rb file and run rake routes.
+
+In the config/routes.rb file you will see a 'devise_for :users' is added. This generates a whole set of routes that devise will use.  Run
+
+```
+rake routes
+```
+
+
+
 You should see many new routes. And they reference controllers that are __NOT__
 in your app? 
 
 Where are they?
 
+#### Run rake db:migrate
+For the User model. And take a look at the schema.rb
+
+
+
 ## Devise Modules
 * database-authenticatable  	Handles authentication of a user, as well as password encryption.
 * confirmable  	Adds the ability to require email confirmation of user accounts.
-* lockable  	Can lock an account after n number of failed login attempts. recoverable Provides password reset functionality.
+* lockable  	Can lock an account after n number of failed login attempts. 
+* recoverable   
+	Provides password reset functionality.
 * registerable  	Alters user sign up to be handled in a registration process, along with account management.* rememberable  	Provides remember me functionality. 
 * timeoutable  	Allows sessions to be expired in a configurable time frame.* trackable:	Stores login counts, timestamps, and IP addresses.* validatable	Adds customizable validations to email and password.* omniauthable	Adds Omniauth2 support
 
@@ -139,27 +155,50 @@ Devise can manage the registration of users. Which types of features an applicat
 	</thead>
 	<tbody>
 	<tr>
-		<td>cancel_user_registration</td><td>GET</td><td>/users/cancel(.:format)</td><td>devise/registrations#cancel
+		<td>cancel_user_registration</td>
+		<td>GET</td><td>/users/cancel(.:format)</td>
+		<td>devise/registrations#cancel
 		</td>
 	</tr>
 
 	<tr>
-		<td>user_registration</td><td>POST</td><td>/users(.:format)</td><td>devise/registrations#create
-		</td>
+		<td>user_registration</td><td>POST</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#create</td>
 	</tr>
 
 	<tr>
-		<td>new_user_registration</td><td>GET</td><td>/users/sign_up(.:format)</td><td>devise/registrations#new
-		</td>
+		<td>new_user_registration</td>
+		<td>GET</td>
+		<td>/users/sign_up(.:format)</td>
+		<td>devise/registrations#new</td>
 	</tr>
 
-<tr><td>edit_user_registration</td><td>GET</td><td>/users/edit(.:format)</td><td>devise/registrations#edit</td></tr>
+	<tr>
+		<td>edit_user_registration</td>
+		<td>GET</td><td>/users/edit(.:format)</td>
+		<td>devise/registrations#edit</td>
+	</tr>
 
-<tr><td></td><td>PATCH</td><td>/users(.:format)</td><td>devise/registrations#update</td></tr>
+	<tr>
+		<td></td>
+		<td>PATCH</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#update</td>
+	</tr>
 
-<tr><td></td><td>PUT</td><td>/users(.:format)</td><td>devise/registrations#update</td></tr>
+	<tr>
+		<td></td>
+		<td>PUT</td>
+		<td>/users(.:format)</td>
+		<td>devise/registrations#update</td>
+	</tr>
 
-<tr><td></td><td>DELETE</td><td>/users(.:format)</td><td>devise/registrations#destroy</td></tr>
+	<tr>
+		<td></td>
+		<td>DELETE</td>
+		<td>/users(.:format)</td><td>devise/registrations#destroy</td>
+	</tr>
 </tbody>
 </table>
 
@@ -172,7 +211,8 @@ Devise can manage the registration of users. Which types of features an applicat
 ## Add login/logout links to Layout  
 
 ```
- <% if user_signed_in? %>
+ <div>
+     <% if user_signed_in? %>
       Logged in as <strong><%= current_user.email %></strong>.
       <%= link_to 'Edit profile', edit_user_registration_path %> |
       <%= link_to "Logout", destroy_user_session_path, method: :delete %>
@@ -180,7 +220,7 @@ Devise can manage the registration of users. Which types of features an applicat
       <%= link_to "Sign up", new_user_registration_path %> |
       <%= link_to "Login", new_user_session_path %>
     <% end %>
-  </div>
+ </div>
 ```
 
 
