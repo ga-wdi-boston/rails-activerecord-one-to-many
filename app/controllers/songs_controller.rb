@@ -1,4 +1,5 @@
 class SongsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # Get run before the actions
   before_action :set_album
@@ -15,6 +16,21 @@ class SongsController < ApplicationController
     @song = @album.songs.find(params[:id])
   end
 
+  def new
+    @song = Song.new
+  end
+
+  def create
+  end 
+
+  def edit
+  end
+
+  def update
+  end
+
+  def destroy
+  end
   private
 
   def set_album
