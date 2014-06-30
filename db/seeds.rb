@@ -8,3 +8,6 @@ sea_change.songs.new(title: 'Lonesome Tears', artist: "Beck", price: 2.99, durat
 sea_change.save!
 
 nevermind = Album.create(name: 'Nevermind', genre: 'rock')
+nevermind.songs.new(title: 'Lithium', artist: 'Nirvana', price: 3.99, duration: 198)
+nevermind.songs.new(title: 'Smells Like Teen Spirit', artist: 'Nirvana', price: 3.99, duration: 198)
+nevermind.save!
