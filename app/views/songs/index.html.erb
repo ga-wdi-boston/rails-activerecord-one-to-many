@@ -10,3 +10,5 @@
     <dd>Album <%= link_to song.album.name, album_path(song.album) %> </dd>            
   <% end %>
 </dl>
+
+<%= link_to "New Song", new_album_song_path(@album) %>

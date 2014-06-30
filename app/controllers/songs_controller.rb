@@ -9,18 +9,27 @@ class SongsController < ApplicationController
     @songs = @album.songs
   end
 
-  # GET /songs/:id
+  # GET /albums/:album_id/songs/:id
   def show
     # ONLY look in this album for songs with 
     # the id in the params.
     @song = @album.songs.find(params[:id])
   end
 
+  # GET /albums/:album_id/songs/new
   def new
     @song = Song.new
   end
 
+  # POST /albums/1/songs
   def create
+    @song = @album.songs.new(song_params)
+
+    if @song.save
+      redirect_to album_songs_path(@album)
+    else
+      render :new
+    end
   end 
 
   def edit
@@ -36,5 +45,9 @@ class SongsController < ApplicationController
   def set_album
     @album = Album.find(params[:album_id])
   end
-  
+
+  def song_params
+    params.require(:song).permit([:title, :artist, :duration, :price, :album_id ])
+  end
+                                 
 end
