@@ -80,15 +80,31 @@ In this case confirmation and lockout features of Devise are not being used. But
 #### Lets Look at the User model.
 We're using a couple of devise modules. See Devise Modules below.	
 #### Look at the routes.rb file and run rake routes.
+
+In the config/routes.rb file you will see a 'devise_for :users' is added. This generates a whole set of routes that devise will use.  Run
+
+```
+rake routes
+```
+
+
+
 You should see many new routes. And they reference controllers that are __NOT__
 in your app? 
 
 Where are they?
 
+#### Run rake db:migrate
+For the User model. And take a look at the schema.rb
+
+
+
 ## Devise Modules
 * database-authenticatable  	Handles authentication of a user, as well as password encryption.
 * confirmable  	Adds the ability to require email confirmation of user accounts.
-* lockable  	Can lock an account after n number of failed login attempts. recoverable Provides password reset functionality.
+* lockable  	Can lock an account after n number of failed login attempts. 
+* recoverable   
+	Provides password reset functionality.
 * registerable  	Alters user sign up to be handled in a registration process, along with account management.* rememberable  	Provides remember me functionality. 
 * timeoutable  	Allows sessions to be expired in a configurable time frame.* trackable:	Stores login counts, timestamps, and IP addresses.* validatable	Adds customizable validations to email and password.* omniauthable	Adds Omniauth2 support
 
