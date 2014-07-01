@@ -2,37 +2,30 @@
 
 ### Objectives
 * Create many to many relationship.
-* 
+
+* Add a User - Album Many to Many relationship
+ `r g model ManagedAlbums user:belongs_to album:belongs_to role`
+ 
+ Take a look at the migration and model generated.
+ 
+* In the User model, user.rb add.  
+
+```
+has_many :managed_albums 
+has_many :albums, through: :managed_albums
+```
+I've added the role so that we can in the future authorize action based on the role or admin, creative director and artist. 
 
 
-## Create some Users
-In the seed.rb file add.
+* Add Seed data.
 
 ```
 User.delete_all
-puts 'Creating Users'  
-User.create!(email: 'joe@example.com', password: 'password')  
-User.create!(email: 'jill@example.com', password: 'password')  
-User.create!(email: 'tom@example.com', password: 'password')  
-```
+...
 
-
-## Add a User - Album Many to Many relationship
- `r g model ManagedAlbums user:belongs_to album:belongs_to role`
- 
- In the User model, user.rb add.  
- 	```
-  	has_many :managed_albums 
-	has_many :albums, through: :managed_albums
-	```
-
-In the seed file add.  
-
-```
-joe = User.first  
-joe.albums.create!(title: "Beck Ola")
-joe.albums << Album.find_by_name('Sea Change')
-joe.albums << Album.find_by_name('Nevermind')
+jill =  User.create!(email: 'jill@example.com', password: 'password', role: 'admin')
+fred =  User.create!(email: 'fred@example.com', password: 'password', role: 'creative director')
+mort =  User.create!(email: 'mort@example.com', password: 'password', role: 'artist')
 ```
 
 

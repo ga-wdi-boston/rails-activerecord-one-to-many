@@ -1,5 +1,10 @@
+User.delete_all
 Album.delete_all
 Song.delete_all
+
+jill =  User.create!(email: 'jill@example.com', password: 'password')
+fred =  User.create!(email: 'fred@example.com', password: 'password')
+mort =  User.create!(email: 'mort@example.com', password: 'password')
 
 sea_change = Album.create(name: "Sea Change", genre: 'rock')
 sea_change.songs.create!(title: 'Golden Age', artist: "Beck", price: 1.99, duration: 215)
