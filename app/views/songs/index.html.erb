@@ -10,6 +10,8 @@
     <dd>Album <%= link_to song.album.name, album_path(song.album) %> </dd>            
     <dd>Edit <%= link_to song.title, edit_album_song_path(@album,
     song) %> </dd>        
+    <dd>Delete <%= link_to song.title, album_song_path(@album,
+    song), method: :delete, data: {confirm: 'Are you sure'} %> </dd>        
   <% end %>
 </dl>
 

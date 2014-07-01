@@ -26,7 +26,7 @@ class SongsController < ApplicationController
     @song = @album.songs.new(song_params)
 
     if @song.save
-      redirect_to album_songs_path(@album)
+      redirect_to album_songs_path(@album), notice: "Song #{@song.title} created in #{@album.name}"
     else
       render :new
     end
@@ -46,6 +46,9 @@ class SongsController < ApplicationController
   end
 
   def destroy
+    @song = Song.find(params[:id])
+    @song.destroy
+    redirect_to album_songs_path(@album), alert: 'Song deleted'
   end
   
   private
