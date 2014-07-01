@@ -2,14 +2,15 @@ User.delete_all
 Album.delete_all
 Song.delete_all
 
-jill =  User.create!(email: 'jill@example.com', password: 'password')
-fred =  User.create!(email: 'fred@example.com', password: 'password')
-mort =  User.create!(email: 'mort@example.com', password: 'password')
+jill =  User.create!(email: 'jill@example.com', password: 'password', role: 'admin')
+fred =  User.create!(email: 'fred@example.com', password: 'password', role: 'creative director')
+mort =  User.create!(email: 'mort@example.com', password: 'password', role: 'artist')
 
 sea_change = Album.create(name: "Sea Change", genre: 'rock')
 sea_change.songs.create!(title: 'Golden Age', artist: "Beck", price: 1.99, duration: 215)
 sea_change.songs.create!(title: 'Lost Cause', artist: "Beck", price: 4.99, duration: 182)
 sea_change.songs.create!(title: 'Lonesome Tears', artist: "Beck", price: 2.99, duration: 156)
+
 
 # Create the album
 nevermind = Album.create(name: 'Nevermind', genre: 'rock')

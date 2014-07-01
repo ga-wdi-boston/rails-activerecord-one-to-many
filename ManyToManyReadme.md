@@ -11,9 +11,10 @@
 * In the User model, user.rb add.  
 
 ```
-has_many :managed_albums 
-has_many :albums, through: :managed_albums
+ has_many :managed_albums, class_name: 'ManagedAlbums' 
+  has_many :albums, through: :managed_albums
 ```
+
 I've added the role so that we can in the future authorize action based on the role or admin, creative director and artist. 
 
 
