@@ -9,7 +9,7 @@ class SongsController < ApplicationController
     @songs = @album.songs
   end
 
-  # GET /songs/:id
+  # GET /albums/:album_id/songs/:id
   def show
     # ONLY look in this album for songs with 
     # the id in the params.
@@ -21,6 +21,18 @@ class SongsController < ApplicationController
   end
 
   def create
+    # Why don't I have to pass in the id of the Album 
+    # that this song belongs to?
+
+    # Because Rails has_many will set the album_id automagically
+    # because we are adding the song to specific album.
+    @song = @album.songs.new(song_params)
+
+    if @song.save
+      redirect_to album_songs_path(@album), notice: "You created a new song"
+    else
+      render :new
+    end
   end 
 
   def edit
@@ -32,6 +44,11 @@ class SongsController < ApplicationController
   def destroy
   end
   private
+
+  # Make the params strong
+  def song_params
+    params.require(:song).permit(:title, :duration, :price, :artist)
+  end
 
   def set_album
     @album = Album.find(params[:album_id])
