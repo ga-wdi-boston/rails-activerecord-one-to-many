@@ -36,9 +36,21 @@ class SongsController < ApplicationController
   end 
 
   def edit
+    # Get an existing song from an album
+   @song = @album.songs.find(params[:id])
   end
 
   def update
+    # Find the song, by id, in the album
+    @song = @album.songs.find(params[:id])
+
+    # update the song 
+    if @song.update(song_params)
+      # Show all the songs for this album
+      redirect_to album_songs_path(@album), notice: "You updated song"
+    else
+      render :edit
+    end
   end
 
   def destroy
