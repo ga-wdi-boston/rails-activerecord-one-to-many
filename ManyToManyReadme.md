@@ -24,9 +24,9 @@ I've added the role so that we can in the future authorize action based on the r
 User.delete_all
 ...
 
-jill =  User.create!(email: 'jill@example.com', password: 'password', role: 'admin')
-fred =  User.create!(email: 'fred@example.com', password: 'password', role: 'creative director')
-mort =  User.create!(email: 'mort@example.com', password: 'password', role: 'artist')
+jill =  User.create!(email: 'jill@example.com', password: 'password')
+fred =  User.create!(email: 'fred@example.com', password: 'password')
+mort =  User.create!(email: 'mort@example.com', password: 'password')
 ```
 
 
