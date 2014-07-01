@@ -54,7 +54,11 @@ class SongsController < ApplicationController
   end
 
   def destroy
+    @song = @album.songs.find(params[:id])
+    @song.destroy
+    redirect_to album_songs_path(@album), alert: "Song deleted"
   end
+
   private
 
   # Make the params strong

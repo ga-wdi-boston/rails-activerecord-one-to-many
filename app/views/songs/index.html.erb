@@ -7,7 +7,9 @@
     <dd>Duration <%= song.duration %> </dd>    
     <dd>Price <%= song.price%> </dd>        
     <dd>ID <%= song.id %> </dd>        
-    <dd>Album <%= link_to song.album.name, @album %> </dd>   | <%= link_to 'Edit', edit_album_song_path(@album, song) %>
+    <dd>Album <%= link_to song.album.name, @album %> </dd>   
+    | <%= link_to 'Edit', edit_album_song_path(@album, song) %>
+    | <%= link_to 'Delete', album_song_path(@album, song), method: :delete, data: {confirm: 'Are you sure?'} %>
   <% end %>
 </dl>
 
