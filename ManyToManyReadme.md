@@ -30,19 +30,59 @@ mort =  User.create!(email: 'mort@example.com', password: 'password')
 ```
 
 
-### Allow users the ability see their managed albums.
-Add the below to the Album index action.  
+* In the rails console.  
 
 ```
- if current_user  
-      @articles = current_user.articles  
-    else  
-      @articles = Article.all  
-    end  
+jill = User.first
+jill.managed_albums.new(album: Album.last, role: 'artist')
+
+```
+We've created a managed album for jill. Notice that the user_id is set to jill's id, primary in the user table.
+
+The album_id is set to the primary of the last Album. 
+
+We have __not__ yet persisted this ManagedAlbum instance, it's id is nil. 
+
+* Save jill and the reload jill from the DB.
+
+```
+jill.save
+jill = User.first
+jill.managed_albums
+jill.albums
 ```
 
-### Only allow logged in users the ability to create, update or delete albums.
-In the Album controller.
-	`before_action :authenticate_user!, except: [:index,:show]`
-	
-Now try to update an album. You should not be allowed!
+Now we see that not only does jill have managed_articles. She also has articles.
+
+
+__The articles for a user are found via the join table, managed_articles, when using a "through" relationship.__
+
+
+* Remove Managed albums when removing a user.
+
+Add a dependent: :destroy to the managed_albums in the User model.
+
+```
+  has_many :managed_albums, class_name: 'ManagedAlbums', dependent: :destroy
+```
+
+* Update seeds 
+
+```
+mule = Album.create!(name: 'Mule Variations', genre: 'jazz')
+mule.songs.create!(title: 'Chocolate Jesus', artist: 'Tom Waits', duration: 133, price: 1.99)
+mule.songs.create!(title: 'Picture in a Frame', artist: 'Tom Waits', duration: 202, price: 3.99)
+
+mort.managed_albums.create!(album: nevermind, role: 'admin')
+mort.managed_albums.create!(album: sea_change, role: 'artist')
+jill.managed_albums.create!(album: nevermind, role: 'artist')
+jill.managed_albums.create!(album: sea_change, role: 'artist')
+fred.managed_albums.create!(album: nevermind, role: 'creative director')
+tom.managed_albums.create!(album: mule, role: 'artist')
+```
+
+### Lab
+
+Create a User method to find all user songs. 
+
+
