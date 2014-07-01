@@ -4,6 +4,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :managed_albums, class_name: 'ManagedAlbums' 
+  has_many :managed_albums, class_name: 'ManagedAlbums', dependent: :destroy
   has_many :albums, through: :managed_albums
 end
