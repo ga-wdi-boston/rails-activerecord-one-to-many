@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   devise_for :users
   # Parent resource
-  resources :albums, only: [:index, :show] do 
+  resources :albums do 
     # The URLs for songs indicate which album 
     # the song is in. 
     # Child resource
