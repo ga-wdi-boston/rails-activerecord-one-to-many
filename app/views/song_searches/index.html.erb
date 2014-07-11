@@ -1,0 +1,5 @@
+<ul><%= "#{@title_msg}" %>
+  <% @songs.each do |song| %>
+  <li> <%= link_to song.title, album_song_path(song.album, song) %> </li>
+  <% end %>
+</ul>

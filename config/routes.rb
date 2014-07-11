@@ -11,6 +11,11 @@ Rails.application.routes.draw do
     
     # Look at rake routes, http://localhost:3000/rails/info/routes
   end
+
+  # Allow one to see all songs not nested inside of an album
+  resources :songs, only: [:index]
+  
+  resources :song_searches, only: [:new, :create, :index]
   
   # Set the root route .
   # This will be the controller/action that gets 
