@@ -1,3 +1,37 @@
 <p>
   Album is <%= @album.name %>
 </p>
+
+<ol>
+<% @album.songs.each do |song| %>
+  <li><%= song.title %></li>
+<% end %>
+</ol>
+
+Nested method:
+
+<%= form_for [@album, @song]  do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.submit %>
+<% end %>
+
+Alternative method:
+
+<%= form_for @song do |f| %>
+  <%= f.hidden_field :album_id %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.submit %>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
