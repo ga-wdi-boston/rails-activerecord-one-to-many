@@ -1,7 +1,7 @@
 ## Rails Has Many and Belongs To relationships
 
 ### Objectives    
-* Create models with _"has many"_" and _""belongs to"_ relationships
+* Create models with _"has many"_ and _"belongs to"_ relationships
 * Show how _"parent"_ and _"child"_ relationships are created and managed
 * Associate songs with an album
 * Associate books with an author
