@@ -92,21 +92,24 @@ The Rails belongs_to will:
 
 ## Lab
 In the assoc_books git branch, create a Book model and make it belong to an Author.
-Book should have a title, price and published_date attributes. Author should have a name. 
+
+Book should have a title, price and published_date attributes. 
+
+Author should have a name. 
 
 
-## Has Many Relationship.
+## Has Many Relationship
 
-We would like to be find all the songs in an album. For example, we would like to.  
+We would like to be able to find all the songs in an album. For example, we would like to be able to do this:  
 
 ```
   sea_change = Album.last
   sea_change.songs
 ```
 
-Once again, we could write our own methods on the class, Album, to get all the songs, Album#songs. Or we could create a method on Album to add a song, Album#songs<<(song). 
+Once again, we could write our own methods on the class Album to get all the songs: Album#songs. Or we could create a method on Album to add a song: Album#songs << song. 
 
-But, we can use [has_many](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many) that's provided by Rails. Add.  
+But instead, we can use [has_many](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many) that's provided by Rails.
 
 ```
 class Album < ActiveRecord::Base
@@ -114,7 +117,9 @@ class Album < ActiveRecord::Base
 end
 ```
 
-The [has_many](http://guides.rubyonrails.org/association_basics.html#the-has-many-association) adds methods to a class/model that will provide the above methods. These methods will generate the correct SQL to retrieve all songs that are associated with this album. Or to generate the SQL to associate, or make a child song.
+The [has_many association](http://guides.rubyonrails.org/association_basics.html#the-has-many-association) adds methods to a class/model that will provide the above methods. These methods will generate the correct SQL to retrieve all songs that are associated with this album, or to generate the SQL to associate, or make a child song.
+
+Again, when you're in the model file album.rb, the code `has_many :songs` is a method that takes `:songs` as the argument. This method generates Ruby methods that themselves generate SQL to retrieve all the songs that are associated with a particular album, or create a new song and associate it with that album. 
 
 
 * Show all the songs associated with an album.
@@ -126,7 +131,7 @@ see_change.songs
 
 ```
 
-This will generate the SQL to find all the songs, children, in an album, parent.
+This will generate the SQL to find all the songs that are children of a given album parent.
 
 ```
 SELECT "songs".* FROM "songs"  WHERE "songs"."album_id" = $1  [["album_id", 2]]
@@ -140,7 +145,7 @@ sea_change.songs.new(title: 'Lost Cause', artist: 'Beck', price
 ed_at: nil>
 ```
 
-Notice how we have created a new song that has a foreign key, album_id, set to this album. _Yay, wee, I am so excited_  
+Notice how we have created a new song that has a foreign key, album_id, set to this album. *Yay, wee, I am so excited!*
 
 But, this song has __not__ been saved to the DB. It has a nil id, _primary key_.
 
@@ -169,7 +174,7 @@ Check it by finding:
 
 ## Removing Parent objects.
 
-We'll see that removing a parent object without deleting it's children can corrupt the data. We want to maintain the _Data Integrity_.
+We'll see that removing a parent object without deleting its children can corrupt the data. We want to maintain the _data integrity_.
 
 For example, in the rails console.  
 
@@ -180,9 +185,9 @@ lost = Song.find_by_title('Lost Cause')
 lost.album
 ```
 
-Here we have remove the album from the DB but there are still _orphaned_ children songs in the DB. We have corrupted the data by leaving a foreign key reference in two songs to a _non-existent_ album. _Not good_.
+Here we have remove the album from the DB but there are still _orphaned_ children songs in the DB. We have corrupted the data by leaving a foreign key reference in two songs to a _non-existent_ album. Not good.
 
-Lets fix this by restoring the DB to a good state by seeding the DB.  
+Let's fix this by restoring the DB to a good state by seeding the DB.  
 
 ```
 Album.delete_all
@@ -219,15 +224,15 @@ sea_change.count
 
 Initially, we'll see 3 songs. Then when we destroy the "Sea Change" album we'll see the SQL DELETE run and all of the albums songs will be gone.
 
-Make sure you __DO NOT__ add the dependent: :destroy to the song's belongs_to. 
+Make sure you __DO NOT__ add the `dependent: :destroy` to the song's belongs_to. 
 
 Why?
 
-Awww, lets screw it up for fun. Go ahead add the dependent: destroy to the belongs_to and remove a song.
+Awww, let's screw it up for fun. Go ahead and add the `dependent: destroy` to the belongs_to and remove a song.
 
 ## Lab
 
-In a assoc_books git branch. Create a has_many, parent, relationship from the Author to the Book model. Don't forget the dependent: :destroy.
+In the assoc_books git branch, create a has_many parent relationship from the Author to the Book model. Don't forget the dependent: :destroy.
 
 
 ## Lab
@@ -238,7 +243,7 @@ Add a genre to the Album. Also albums must have a name and the genre must be eit
 Songs must have a title, artist, duration (greater than 60 seconds). No price is required.
 
 ## Lab
-In a assoc_books git branch. Authors must have a name. Book must have a title.
+In the assoc_books git branch. Authors must have a name. Book must have a title.
 
 
 ## Nested Resources
@@ -255,7 +260,7 @@ nevermind.songs.new(title: 'Smells Like Teen Spirit', artist: 'Nirvana', price: 
 
 The problem here is that we are showing all the songs. We want to show __ONLY__ the songs for each album.
 
-* Lets try add a URL parameter to get find only the songs for a specific album.
+* Let's try add a URL parameter to find only the songs for a specific album.
 
 ``` 
 def index
@@ -300,7 +305,7 @@ In app/views/albums/show.html.erb
 
 ## Before Filter
 
-Lets add a before_action method the songs controller. This will use one private controller method to get the album for each song. 
+Let's add a before_action method the songs controller. This will use one private method in the controller to get the album for each song. It should be private because it will only be called by another method inside the controller (in this case, the before_action), but never called from outside the controller the way that index, show, etc. get called.
 
 In the app/controllers/songs_controller.rb
 
@@ -321,7 +326,7 @@ Read more about [before filters](http://guides.rubyonrails.org/action_controller
 
 ## Lab
 
-In a assoc_books git branch. Create a Book route, controller, index and show actions and views.
+In the assoc_books git branch, create a Book route, controller, index and show actions and views.
 
 Make Book a nested route of Author and use a before action in the books controller.
 
@@ -333,24 +338,3 @@ Make Book a nested route of Author and use a before action in the books controll
 #### Update a song in an album.
 
 #### Delete a song from an album.
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
