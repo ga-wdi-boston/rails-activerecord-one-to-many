@@ -1,14 +1,14 @@
-## Rails Has Many and Belongs to relationships
+## Rails Has Many and Belongs To relationships
 
 ### Objectives    
-* Create models with _"have many"_" and a _""belongs to"_ relationships
-* Show how _"parent"_ and _"child"_ relationships are created and managed.
-* Associate songs with an album.
-* Associate books with an author.
+* Create models with _"has many"_" and _""belongs to"_ relationships
+* Show how _"parent"_ and _"child"_ relationships are created and managed
+* Associate songs with an album
+* Associate books with an author
 
 
-Will we start by creating a relationship between Albums and songs. 
-An album will "have many" songs. And a song will "belong to", or be a child of an Album. At this time, each song can only be associated with one album. _This may change in the future_.
+We will start by creating a relationship between Albums and Songs. 
+An album will "have many" songs. And a song will "belong to", or be a child of, an Album. At this time, each song can only be associated with one album. _This may change in the future_.
 
 In the Lab sections students will create a relationship between authors and books. The Author will be the "parent" and the Book will be a "child" of the Author. These terms will become more clear as we work through this lesson.
 
@@ -16,14 +16,12 @@ In the Lab sections students will create a relationship between authors and book
 * Draw a relationship between a Album and a Song.  DB tables and Rails models.
 
 #### Setup 
-We have created an Album resource already in this app. Each Album has one attribute, name. 
-
-An Album will have a name. 
+We have created an Album resource already in this app. Each Album has one attribute, _name_. 
 
 Run bundle, create the app DB, migrate and seed. Then run the server and go to the root to see that we have a couple of albums.
 
 
-## Belongs To Relationship.
+## Belongs To Relationship
 
 Now we will create a Song that is associated with one Album.
 
@@ -31,14 +29,18 @@ A Song will have a title, artist, duration and price. And it will have a column 
 
 This column will be named __album_id__ and it will serve as a _foreign key_ to the album that this song belongs to.
 
-The Rails convention for foreign key naming convention is __"resource""_id__, where "resource" is the parent resource/model.  
+The Rails convention for foreign key naming convention is __"resource"_id__, where "resource" is the parent resource/model.  
+
+You don't have to create this foreign key yourself. Rails will do it for you when you include the __belongs_to__ relationship in your migration (or manually in your model files). 
 
 ##### Question:
 Could we add new columns to the Album table for each song?
 
 song_1_title, song_1_artist, ... , song_2_title, song_2_artist, ...
 
-##### Create a Song with an album foreign key. 
+Yes, but it's not a good idea. If you find yourself putting numbers in your column names, create a new model instead. 
+
+##### Create a Song with an Album foreign key. 
 
 ```
 rails g model Song title:string artist:string duration:integer price:decimal album:belongs_to 
@@ -52,9 +54,9 @@ rails g model Song title:string artist:string duration:integer price:decimal alb
 * Look at the Seed model in the rails console. It has a foreign key __album_id__.  
 
 
-We would like methods, getter/setter, on the Song model to return the Album that the song belongs to. Rather than write it ourselve we can use the Rails __belongs_to__. 
+We would like to have some methods (getters and setters) on the Song model to return the Album that the song belongs to. Rather than write it ourselve we can use the Rails __belongs_to__. 
 
-Look at the Rails guide for [belongs_to](http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association). And the Rails docs for [belongs_to](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-belongs_to)
+Look at the Rails guide for [belongs_to](http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association) and the Rails docs for [belongs_to](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-belongs_to).
 
 
 * Add belongs_to to the Song model.
@@ -68,7 +70,7 @@ Look at the Rails guide for [belongs_to](http://guides.rubyonrails.org/associati
 	 s.save
 		
 	```
-	Notice that the belongs_to provided a getter method, album=(), to set the parent. Then you can see that the calling save on the song ran a SQL Update to update the song's album_id foreign key.
+	Notice that the belongs_to provided a setter method, _album=()_, to set the parent. Then you can see that the calling save on the song ran a SQL Update to update the song's album_id foreign key.
 	
 * Let's get this song from the DB again and call the album 'getter' provided by the belongs_to.  
 
@@ -89,7 +91,7 @@ The Rails belongs_to will:
 
 
 ## Lab
-In a assoc_books git branch. Create Book model and make it belong to an Author.
+In the assoc_books git branch, create a Book model and make it belong to an Author.
 Book should have a title, price and published_date attributes. Author should have a name. 
 
 
