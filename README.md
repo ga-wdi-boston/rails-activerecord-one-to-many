@@ -9,7 +9,7 @@ Now that you know ActiveRecord Associations `has_many` and `belongs_to`, go back
 
 # Instructions
 
-* Complete the following user stories.
+* Complete the following user stories. A user story is *not* complete unless the story is performable via the browser; being performable via the console is not enough.
 * By the end of this exercise:
   * You should have a working category feature and a working suggested readings feature.
   * You should have category views that all posts within a particular category.
@@ -20,6 +20,7 @@ Now that you know ActiveRecord Associations `has_many` and `belongs_to`, go back
 * Your blog entries may be called "articles" instead of "posts".
 * Your "suggested readings" may be called "links" instead.
 * You will not need to create any forms on the `post/show` page. You should be able to click a link from the post in order to create a new comment or link.
+* You should create controllers and views for both categories and suggested readings. You may not need all seven CRUD actions. You may not need all four CRUD views.
 
 # User Stories
 
