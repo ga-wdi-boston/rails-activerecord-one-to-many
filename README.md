@@ -229,3 +229,7 @@ Make sure you __DO NOT__ add the `dependent: :destroy` to the song's belongs_to.
 Why?
 
 Awww, let's screw it up for fun. Go ahead and add the `dependent: destroy` to the belongs_to and remove a song.
+
+## Homework
+
+Follow the instructions in [ga-wdi-boston/wdi_4_rails_hw_has_many_albums](https://github.com/ga-wdi-boston/wdi_4_rails_hw_has_many_albums).
