@@ -198,6 +198,15 @@ Work in Groups.
 
 * (Optionally) Create Albums and Songs in the seed file.
 
+* What happens if in the rails console you:
+
+```
+s1 = Song.first
+s1.album
+```
+
+Yes, the `belongs_to` in the Song Model adds a `album` method to the Song that returns the album the song belongs to.
+
 * Draw, as a group, the DB tables for Albums and Songs. Each table should have a row for each Album and Song. (Don't forget to show the foreign keys!)
 
 
