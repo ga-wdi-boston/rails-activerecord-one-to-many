@@ -168,7 +168,19 @@ Then we create a review for the movie 'Affliction' with `m1.reviews.create(name:
 
 Then we get the one and only review at this time in the DB with the `r1 = Review.first`. 
 
-Then we show all the movie, 'Affliction', reviews, `m1.reviews`.
+Then we show all the movie, 'Affliction', reviews, `m1.reviews`. This will generate a SQL SELECT to find all the reviews for the movie 'Affliction'.
+
+```sql
+SELECT "reviews".* FROM "reviews" WHERE "reviews"."movie_id" = $1  [["movie_id", 1]]
+```
+
+**Open up the rails db console and run this SQL**
+
+```
+SELECT * FROM reviews WHERE reviews.movie_id = 1;
+```
+
+See, this is the SQL created and executed when we do `m1.reviews`
 
 **Let's draw what the movies and reviews tables in the DB look like at this time**
 
