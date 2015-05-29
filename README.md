@@ -3,13 +3,15 @@
 ## Objectives
 * Use the resources method in the routes file to generate all the routes.
 * Create a Review Model and Migration that implements a move review.
-* Review the migration that implements this relationship.
-* Draw an Entity Relationship Diagram (ERD) to show how foreign keys are used to implement these 1 to many relationships in the DB.
+* Review the migration that implements this movie-review relationship.
+* Show how a movie's relationship to a review is one to many.
+* Draw a the Entity Relationship Diagram (ERD), and DB Tables, to show how foreign keys are used to implement these 1 to many relationships in the DB.
 * Use ActiveRecord `has_many` and `belongs_to` to implement this movie/review relationship.
 * Use the Rails console to create movie reviews.
 * Create seed data to pre-populate a couple of movie reviews.
-* Create a Review's controller that will return a JSON representation of movie reviews.
 * Create a nested resource for movie reviews.
+* Create a Review Controller that will return a JSON representation of movie reviews.
+
 
 ## Code Along: Setup
 
@@ -27,11 +29,11 @@ rake db:seed
 rails server
 ```
 
-Ok, you should now be able to see the JSON for all three movies at `http://localhost:3000`.
+Ok, you should now be able to see the JSON for all three movies at `http://localhost:3000` and the JSON for the movie "Mad Max" at `http://localhost:3000/movies/2`
 
 ## Code Along: Create movies routes using 'resources'
 
-Previously, we were creating routes for each Movie Controller action. *This is tedious.* Let's see how we can make this more concise.
+Previously, we were *explicitly* creating routes for each Movie Controller action. *This is tedious.* Let's see how we can make this more concise.
 
 **But, first lets look at all of routes!**
 
@@ -51,7 +53,7 @@ Rails.application.routes.draw do
 end
 ```
 
-The 'resources' method will automatically generate all the routes we've creating individually. *Much better.*
+The 'resources' method will automatically generate all the routes we've been creating individually. *Much better.*
 
 **In another terminal run rake routes again and compare the routes.**
 
@@ -61,11 +63,11 @@ rake routes
 
 ## Code Along: Create a Review Model
 
-Lets use a rails generator to create the review model. This will also create a migration for this model.
+Lets use a rails generator to create the Review Model. This will also create a migration for this Review Model.
 
 **Create the Review Model and Migration. Apply the migration**
 ```
-rails g model Review name comment:text movie:references
+rails g model Review name:string comment:text movie:references
 rake db:migrate
 ```
 
@@ -83,7 +85,7 @@ This will create a **foreign key** column in the reviews table.
 
 The **foreign key** column will contain the id of movie that the review pertains to. 
 
-Another words, the movie "Affliction" has an id of 1. If we create a Review for this movie the row in the DB for this review will have a **foreign key** column, named *movie_id*, with a value of 1.
+Another words, the movie "Affliction" has an id of 1. If we create a review for this movie then the row reviews table will have a **foreign key** column, named *movie_id*, with a value of 1.
 
 **Open up the Rails DB console and take a look at the tables we now have**
 
@@ -160,7 +162,7 @@ r1 = Review.first
 m1.reviews
 ```
 
-First we see that there are no Reviews when we run `Reviews.all`. 
+First we see that there are no Reviews when we run `Review.all`. 
 
 Then we create a review for the movie 'Affliction' with `m1.reviews.create(name: 'Tom', comment: 'Dark, somber')`. 
 
@@ -183,7 +185,7 @@ SELECT * FROM movies;
 See how the movie_id in the reviews column has the value 1. This is the id of the movie that the review is for.
 
 
-### Lab: Create a Album with Songs.
+## Lab: Create a Album with Songs.
 Work in Groups.
 
 * An Album will have a title, artist name, released year.
@@ -217,18 +219,15 @@ Yes, the `belongs_to` in the Song Model adds a `album` method to the Song that r
 Review.delete_all
 Movie.delete_all
 
-movie = Movie.create!(name: 'Affliction', rating: 'R', desc: 'Little Dark', len\
-gth: 123)
+movie = Movie.create!(name: 'Affliction', rating: 'R', desc: 'Little Dark', length: 123)
 movie.reviews.create!(name: 'Tom', comment: 'Dark, somber')
 movie.reviews.create!(name: 'Meg', comment: 'Slow, boring')
 
-movie = Movie.create!(name: 'Mad Max', rating: 'R', desc: 'Fun, action', length\
-: 154)
+movie = Movie.create!(name: 'Mad Max', rating: 'R', desc: 'Fun, action', length: 154)
 movie.reviews.create!(name: 'Joe', comment: 'Explosions, silly')
 movie.reviews.create!(name: 'Christine', comment: 'Brilliant, fun')
 
-movie = Movie.create!(name: 'Rushmore', rating: 'PG-13', desc: 'Quirky humor', \
-length: 105)
+movie = Movie.create!(name: 'Rushmore', rating: 'PG-13', desc: 'Quirky humor', length: 105)
 movie.reviews.create!(name: 'Tom', comment: 'Crazy, humor')
 movie.reviews.create!(name: 'Joanne', comment: 'Waste of time, stupid')
 
@@ -237,7 +236,7 @@ puts "Created three Movies"
 
 ## Code Along: Create a nested route for Reviews.
 
-When we access a review we need to **ALWAYS** refer to the movie that that review belongs to. 
+When we access a review using a URL we will **ALWAYS** refer to the movie that that review belongs to. 
 
 
 For example when we want to see all a specific movie's reviews we will use the URL. `http://localhost:3000/movies/1/reviews`
@@ -253,6 +252,8 @@ For example when we want to see all a specific movie's reviews we will use the U
 
 ```
 
+This will **nest** the routes to reviews inside of the movie routes. *Note, by default Rails also generates routes for the new and edit actions. We don't need these actions in a JSON API.*
+
 **Run rake routes to look at the new routes created**
 
 ## Code Along: Create a Reviews Controller.
@@ -260,6 +261,61 @@ For example when we want to see all a specific movie's reviews we will use the U
 **Create a reviews controller and index action** 
 
 ```
+class ReviewsController < ApplicationController
+  # GET /movies/:movie_id/reviews                                               
+  def index
+  	 # movie the review pertains to
+    @movie = Movie.find(params[:movie_id])
+
+    # all the reviews for a movie
+    @reviews = @movie.reviews
+
+    render json: @reviews
+  end
+end
+
+```
+
+**Access `http://localhost:3000/movies/2/reviews`**
+
+Now you'll see the JSON Representation of the 'Mad Max' movie reviews.
+
+
+## Code Along: before_action
+
+Each action in the Reviews Controller will need to have an instance variable, @movie, that contains the Movie. 
+
+We could just copy the code to get the movie into each and every action. But, this wouldn't be *DRY*.
+
+```ruby
+ @movie = Movie.find(params[:movie_id])
+```
+
+Rails give us a way to say. Execute a method *before* an action is executed. Use the `before_action` and give it the name of the method to execute before each action.
+
+```ruby
+  # Execute this method before each action is executed                          
+  before_action :set_movie
+```
+
+This method, `set_movie` should be private so it can't be invoked by an application user.
+
+```ruby
+  ...
+  private
+
+  # find the movie for the review/s                                             
+  def set_movie
+    # create an instance variable that can be accessed in                       
+    # every action.                                                             
+    @movie = Movie.find(params[:movie_id])
+  end
+  ...
+```
+
+Now, your ReviewController should look like:
+
+```ruby
 class ReviewsController < ApplicationController
   # Execute this method before each action is executed                          
   before_action :set_movie
@@ -285,11 +341,13 @@ end
 
 This will use the `before_action` method that will find the movie that the reviews belong to. *Look up the before_action method in the Rails documentation.*
 
+You'll see that when we create more actions they will all run the code in the `set_movie` action to set the @movie instance variable.
+
 
 *Go to `http://localhost:3000/movies/1/reviews` to check the reviews controller index action*
 
 
-## Code Along: Create Review Show Action.
+## Code Along: Create the Review Show Action.
 
 **Add the show action to the reviews controller**
 
@@ -348,3 +406,22 @@ curl -X DELETE localhost:3000/movies/3/reviews/6
 ```
 curl -X POST -d "review[name]=Jackie&review[comment]=Sucks" http://localhost:3000/movies/2/reviews
 ```
+
+## Lab: Create Album and Song Controllers and nested routes.
+
+Pretty much the same as above but using album has many songs instead of movie has many reviews.
+
+## Reference
+
+* [Rails Association Basics](http://guides.rubyonrails.org/association_basics.html) Read the sections on belongs_to and has_many.
+
+* [Rails Documentation](http://api.rubyonrails.org/)
+
+* [Debugging Rails with the byebug Gem](http://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-byebug-gem)
+
+* [With So Much Rails to Learn, Where Do You Start?](http://www.justinweiss.com/blog/2015/05/25/with-so-much-rails-to-learn/?utm_source=rubyweekly&utm_medium=email)
+
+* [ActiveRecord Basics](http://guides.rubyonrails.org/active_record_basics.html)
+
+
+
