@@ -3,5 +3,8 @@ Rails.application.routes.draw do
   root 'movies#index'
 
   # create routes for movie resource
-  resources :movies, except: [:new, :edit]
+  resources :movies, except: [:new, :edit] do
+    # create nested routes for the movie reviews
+    resources :reviews, except: [:new, :edit]
+  end
 end

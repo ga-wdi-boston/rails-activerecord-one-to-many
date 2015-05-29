@@ -7,7 +7,7 @@
 * Draw an Entity Relationship Diagram (ERD) to show how foreign keys are used to implement these 1 to many relationships in the DB.
 * Use ActiveRecord `has_many` and `belongs_to` to implement this movie/review relationship.
 * Use the Rails console to create movie reviews.
-* Create seed data to prepopulate a couple of movie reviews.
+* Create seed data to pre-populate a couple of movie reviews.
 * Create a Review's controller that will return a JSON representation of movie reviews.
 * Create a nested resource for movie reviews.
 
@@ -208,5 +208,82 @@ s1.album
 Yes, the `belongs_to` in the Song Model adds a `album` method to the Song that returns the album the song belongs to.
 
 * Draw, as a group, the DB tables for Albums and Songs. Each table should have a row for each Album and Song. (Don't forget to show the foreign keys!)
+
+## Code Along: Populate Movie Reviews
+
+**Add to the seed file**
+
+```
+Review.delete_all
+Movie.delete_all
+
+movie = Movie.create!(name: 'Affliction', rating: 'R', desc: 'Little Dark', len\
+gth: 123)
+movie.reviews.create!(name: 'Tom', comment: 'Dark, somber')
+movie.reviews.create!(name: 'Meg', comment: 'Slow, boring')
+
+movie = Movie.create!(name: 'Mad Max', rating: 'R', desc: 'Fun, action', length\
+: 154)
+movie.reviews.create!(name: 'Joe', comment: 'Explosions, silly')
+movie.reviews.create!(name: 'Christine', comment: 'Brilliant, fun')
+
+movie = Movie.create!(name: 'Rushmore', rating: 'PG-13', desc: 'Quirky humor', \
+length: 105)
+movie.reviews.create!(name: 'Tom', comment: 'Crazy, humor')
+movie.reviews.create!(name: 'Joanne', comment: 'Waste of time, stupid')
+
+puts "Created three Movies"
+```
+
+## Code Along: Create a nested route for Reviews.
+
+When we access a review we need to **ALWAYS** refer to the movie that that review belongs to. 
+
+
+For example when we want to see all a specific movie's reviews we will use the URL. `http://localhost:3000/movies/1/reviews`
+
+**Add this to the routes file**  
+
+```ruby
+  # create routes for movie resource                                            
+  resources :movies, except: [:new, :edit] do
+    # create nested routes for the movie reviews                                
+    resources :reviews, except: [:new, :edit]
+  end
+
+```
+
+**Run rake routes to look at the new routes created**
+
+## Code Along: Create a Reviews Controller.
+
+**Create a reviews controller** 
+
+```
+class ReviewsController < ApplicationController
+  # Execute this method before each action is executed                          
+  before_action :set_movie
+
+  # GET /movies/:movie_id/reviews                                               
+  def index
+    # all the movies                                                            
+    @reviews = @movie.reviews
+    render json: @reviews
+  end
+
+  private
+
+  # find the movie for the review/s                                             
+  def set_movie
+    # create an instance variable that can be accessed in                       
+    # every action.                                                             
+    @movie = Movie.find(params[:movie_id])
+  end
+end
+
+```
+
+This will use the `before_action` method that will find the movie that the reviews belong to. *Look up the before_action method in the Rails documentation.*
+
 
 
