@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   # create routes for movie resource
   resources :movies, except: [:new, :edit] do
     # create nested routes for the movie reviews
-    resources :reviews, except: [:new, :edit]
+    resources :reviews, except: [:new, :edit, :update]
   end
 end

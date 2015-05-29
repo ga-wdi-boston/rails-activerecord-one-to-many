@@ -257,7 +257,7 @@ For example when we want to see all a specific movie's reviews we will use the U
 
 ## Code Along: Create a Reviews Controller.
 
-**Create a reviews controller** 
+**Create a reviews controller and index action** 
 
 ```
 class ReviewsController < ApplicationController
@@ -286,4 +286,65 @@ end
 This will use the `before_action` method that will find the movie that the reviews belong to. *Look up the before_action method in the Rails documentation.*
 
 
+*Go to `http://localhost:3000/movies/1/reviews` to check the reviews controller index action*
 
+
+## Code Along: Create Review Show Action.
+
+**Add the show action to the reviews controller**
+
+```
+ # GET /movies/:movie_id/review/:id                                            
+  def show
+    @review = @movie.reviews.find(params[:id])
+    render json: @review
+  end
+```
+
+*Go to `http://localhost:3000/movies/2/reviews/4` to check the reviews controller show action*
+
+## Code Along: Create the Review Destroy Action.
+
+**Add the destroy action to the reviews controller**
+```
+  # DELETE /movies/:movie_id/reviews/:id                                        
+  def destroy
+    @review = @movie.reviews.find(params[:id])
+    @review.destroy
+    head :no_content
+  end
+```
+
+```
+curl -X DELETE localhost:3000/movies/3/reviews/6
+```
+
+## Code Along: Create the Review Create Action.
+
+**Add the create action to the reviews controller.**
+
+```
+  # POST /movies/:movie_id/reviews                                         
+  def create
+    @review = @movie.reviews.build(review_params)
+
+    if @review.save
+      render json: @review, status: :created
+    else
+      render json: @review.errors, status: :unprocessable_entity
+    end
+
+  end
+  
+  ...
+  
+  def review_params
+    params.require(:review).permit([:name, :comment])
+  end
+```
+
+**Send a HTTP POST to movies/2/reviews with a review name and comment**
+
+```
+curl -X POST -d "review[name]=Jackie&review[comment]=Sucks" http://localhost:3000/movies/2/reviews
+```
