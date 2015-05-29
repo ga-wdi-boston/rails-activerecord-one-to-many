@@ -4,14 +4,14 @@
 * Use the resources method in the routes file to generate all the routes.
 * Create a Review Model and Migration that implements a move review.
 * Review the migration that implements this relationship.
-* Draw an Entity Relationship Diagram(ERD) to show how foreign keys are used to implement these 1 to many relationships in the DB.
-* Use ActiveRecord has_many and belongs_to to implement this relationship.
+* Draw an Entity Relationship Diagram (ERD) to show how foreign keys are used to implement these 1 to many relationships in the DB.
+* Use ActiveRecord `has_many` and `belongs_to` to implement this movie/review relationship.
 * Use the Rails console to create movie reviews.
 * Create seed data to prepopulate a couple of movie reviews.
 * Create a Review's controller that will return a JSON representation of movie reviews.
 * Create a nested resource for movie reviews.
 
-## Setup
+## Code Along: Setup
 
 **Make sure you fork, clone, create the DB, migrate and seed the DB.**
 
@@ -29,11 +29,11 @@ rails server
 
 Ok, you should now be able to see the JSON for all three movies at `http://localhost:3000`.
 
-## Demo: Create movies routes using 'resources'
+## Code Along: Create movies routes using 'resources'
 
 Previously, we were creating routes for each Movie Controller action. *This is tedious.* Let's see how we can make this more concise.
 
-But, first lets look at all of routes!
+**But, first lets look at all of routes!**
 
 ```
 rake routes
@@ -53,9 +53,151 @@ end
 
 The 'resources' method will automatically generate all the routes we've creating individually. *Much better.*
 
-In another terminal run rake routes again and compare the routes.
+**In another terminal run rake routes again and compare the routes.**
 
 ```
 rake routes
 ```
+
+## Code Along: Create a Review Model
+
+Lets use a rails generator to create the review model. This will also create a migration for this model.
+
+**Create the Review Model and Migration. Apply the migration**
+```
+rails g model Review name comment:text movie:references
+rake db:migrate
+```
+
+**Open up the migration generated**
+
+This will show ,for us, a new kind of column. A column that will contain the **foreign key** to a movie.
+
+```ruby
+  ...
+  t.references :movie, index: true, foreign_key: true
+  ...
+```
+
+This will create a **foreign key** column in the reviews table. 
+
+The **foreign key** column will contain the id of movie that the review pertains to. 
+
+Another words, the movie "Affliction" has an id of 1. If we create a Review for this movie the row in the DB for this review will have a **foreign key** column, named *movie_id*, with a value of 1.
+
+**Open up the Rails DB console and take a look at the tables we now have**
+
+```
+rails db
+
+\dt
+\d movies
+\d reviews
+```
+
+The `\d` will show all the tables.
+
+ `\dt movies` and `\dt reviews` will show the columns for movies and reviews tables. 
+ 
+*Notice that the reviews table now has a movie_id column. This is the foreign key that references a specific movie by it's id.*
+
+**Open up the db/schema.rb**
+
+And see that the 'reviews' table has a entry 'movie_id' that is the **foreign key**.
+
+
+## Code Along: Create a Movie Review.
+
+**Open the app/models/review.rb**
+
+Notice the **belongs_to** method in the Review Model. This will create a relationship from the review to the movie that the review pertains to.
+
+**Add this to the app/models/movies.rb**
+
+```
+has_many :reviews
+```
+
+The *has_many* method will create a relationship from the Movie Model to the Review model.
+
+Notice how the langauge matches the relationships. A movie may **have many** reviews. And a review **belongs to** one movie.
+
+This is called a **one to many** relationship. Each movie can have many reviews.
+
+**Enough talk, let's create the review in Rails console.**
+
+```
+rails c
+
+m1 = Movie.first
+m1.reviews
+
+```
+
+Notice, a movie now has the reviews method! The **has_many** added to the Movie Model above actually gave the Movie Model this reviews method.
+
+If we were to do this by hand, not using **has_many**, we would do **something like** this. *Warning: very, very simplified example!*
+
+```
+ class Movie < ActiveRecord::Base
+ 
+   # VERY SIMPLIFIED EXAMPLE ONLY, DON'T DO THIS!!
+   def reviews
+      # return the Array of reviews for this movie
+      reviews 
+   end
+ end
+```
+Let's continue.
+
+```
+Review.all
+
+m1.reviews.create(name: 'Tom', comment: 'Dark, somber')
+
+r1 = Review.first
+
+m1.reviews
+```
+
+First we see that there are no Reviews when we run `Reviews.all`. 
+
+Then we create a review for the movie 'Affliction' with `m1.reviews.create(name: 'Tom', comment: 'Dark, somber')`. 
+
+Then we get the one and only review at this time in the DB with the `r1 = Review.first`. 
+
+Then we show all the movie, 'Affliction', reviews, `m1.reviews`.
+
+**Let's draw what the movies and reviews tables in the DB look like at this time**
+
+**Let's confirm our drawing by using rails db**
+
+```
+rails db
+
+SELECT * FROM reviews;
+
+SELECT * FROM movies;
+```
+
+See how the movie_id in the reviews column has the value 1. This is the id of the movie that the review is for.
+
+
+### Lab: Create a Album with Songs.
+Work in Groups.
+
+* An Album will have a title, artist name, released year.
+
+* A Song will have a title, duration and price.
+
+* An Album may have many Songs.
+
+* A Song belongs to an Album.
+
+* Create, in the Rails console, a couple of Albums. Each having one or more Songs. 
+
+* (Optionally) Create Albums and Songs in the seed file.
+
+* Draw, as a group, the DB tables for Albums and Songs. Each table should have a row for each Album and Song. (Don't forget to show the foreign keys!)
+
 
