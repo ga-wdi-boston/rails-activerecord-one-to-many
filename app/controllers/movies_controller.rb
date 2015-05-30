@@ -35,9 +35,9 @@ class MoviesController < ApplicationController
   end
 
   # DELETE /movies/:id
-  def delete
+  def destroy
     @movie = Movie.find(params[:id])
-    @movie.delete
+    @movie.destroy
 
     head :no_content
   end
