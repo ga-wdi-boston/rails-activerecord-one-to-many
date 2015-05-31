@@ -1,7 +1,6 @@
 ![General Assembly Logo](http://i.imgur.com/ke8USTq.png)
 
 ## Objectives
-* Use the resources method in the routes file to generate all the routes.
 * Create a Review Model and Migration that implements a move review.
 * Review the migration that implements this movie-review relationship.
 * Show how a movie's relationship to a review is one to many.
@@ -264,6 +263,24 @@ end
 Now you'll see the JSON Representation of the 'Mad Max' movie reviews.
 
 
+## Code Along: Create the Review Show Action.
+
+**Add the show action to the reviews controller**
+
+```
+ # GET /movies/:movie_id/review/:id                                            
+  def show
+	 # movie the review pertains to
+    @movie = Movie.find(params[:movie_id])
+
+    @review = @movie.reviews.find(params[:id])
+    render json: @review
+  end
+```
+
+*Go to `http://localhost:3000/movies/2/reviews/4` to check the reviews controller show action*
+
+
 ## Code Along: before_action
 
 Each action in the Reviews Controller will need to have an instance variable, @movie, that contains the Movie. 
@@ -310,6 +327,12 @@ class ReviewsController < ApplicationController
     render json: @reviews
   end
 
+  # GET /movies/:movie_id/review/:id                                            
+  def show
+    @review = @movie.reviews.find(params[:id])
+    render json: @review
+  end
+
   private
 
   # find the movie for the review/s                                             
@@ -329,20 +352,6 @@ You'll see that when we create more actions they will all run the code in the `s
 
 *Go to `http://localhost:3000/movies/1/reviews` to check the reviews controller index action*
 
-
-## Code Along: Create the Review Show Action.
-
-**Add the show action to the reviews controller**
-
-```
- # GET /movies/:movie_id/review/:id                                            
-  def show
-    @review = @movie.reviews.find(params[:id])
-    render json: @review
-  end
-```
-
-*Go to `http://localhost:3000/movies/2/reviews/4` to check the reviews controller show action*
 
 ## Code Along: Create the Review Destroy Action.
 
