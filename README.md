@@ -31,35 +31,6 @@ rails server
 
 Ok, you should now be able to see the JSON for all three movies at `http://localhost:3000` and the JSON for the movie "Mad Max" at `http://localhost:3000/movies/2`
 
-## Code Along: Create movies routes using 'resources'
-
-Previously, we were *explicitly* creating routes for each Movie Controller action. *This is tedious.* Let's see how we can make this more concise.
-
-**But, first lets look at all of routes!**
-
-```
-rake routes
-```
-
-**Change config/routes to**
-
-```ruby
-Rails.application.routes.draw do
-  # Default root for '/' in this application                                    
-  root 'movies#index'
-
-  # create routes for movie resource                                            
-  resources :movies, except: [:new, :edit]
-end
-```
-
-The 'resources' method will automatically generate all the routes we've been creating individually. *Much better.*
-
-**In another terminal run rake routes again and compare the routes.**
-
-```
-rake routes
-```
 
 ## Code Along: Create a Review Model
 
