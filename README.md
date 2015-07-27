@@ -36,8 +36,12 @@ We'll list our entities in boxes and draw arrows denoting the relationships. We 
 Exercise: ERDs
 --------------
 
-* Determine parent-child relationships between entities.
-* Draw an analogy between collections and containers.
+First, diagram the database schema for `people`, `places`, and `pets`. Where are foreign keys stored? What are the names of the foreign key columns?
+
+Next, I'll show you the relationship between `Person` and `Pet`. Then, you'll diagram the relationship between `Person` and `Place`.
+
+Can we access `Pets` from `Place`?
+
 
 Resources
 ---------
