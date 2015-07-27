@@ -47,12 +47,76 @@ Exercise: Migrations
 
 **REVIEW:** Generate a migration for `pets`. `pets` should have a `name`, a `species`, and a `dob`.
 
-**RESEARCH:** Write a migration to associate `people` with `pets`. Next, write a migration to associate `people` with `places`.
+After you generate the migration, inspect it visually and if it looks right, run `rake db:migrate`. Next enter `rails db` and inspect the `pets` table with `\d pets`. Do the columns look as you'd expect? Your output should resemble:
 
-**NOTE:** There is more than one way to do this. You can write your migrations and column names by hand, or you can use a special migration syntax to auto-generate the migration for you.
+```txt
+                                     Table "public.pets"
+   Column   |            Type             |                     Modifiers
+------------+-----------------------------+---------------------------------------------------
+ id         | integer                     | not null default nextval('pets_id_seq'::regclass)
+ name       | character varying           |
+ species    | character varying           |
+ dob        | character varying           |
+ created_at | timestamp without time zone | not null
+ updated_at | timestamp without time zone | not null
+Indexes:
+    "pets_pkey" PRIMARY KEY, btree (id)
+```
+
+**RESEARCH:** Write a migration to associate `people` with `pets`. Next, write a migration to associate `people` with `places`. After writing each migration, inspect the migration and run `rake db:migrate`. If you need to make changes, run `rake db:rollback`, edit the migration, and re-run the migrations. If you get too far ahead, you'll need to reset, or "nuke and pave", your database after editing migrations. To "nuke and pave":
+
+```txt
+rake db:drop db:create db:migrate db:seed
+```
+
+**NOTE:** There is more than one way to write association migrations. You can write your migrations and column names by hand, or you can use a special migration syntax to auto-generate the migration for you. If you write your migrations by hand, be sure to add the appropriately named column, add an index, and add a foreign key constraint. If you use the special generator syntax, this will be done for you.
 
 * In [ActiveRecord Migrations](http://edgeguides.rubyonrails.org/active_record_migrations.html), search for "references" in [section 2.1](http://edgeguides.rubyonrails.org/active_record_migrations.html#creating-a-standalone-migration).
 * Also see [section 2.7](http://guides.rubyonrails.org/association_basics.html#choosing-between-belongs-to-and-has-one) in [ActiveRecord Associations](http://guides.rubyonrails.org/association_basics.html).
+
+Enter `rails db` and inspect each altered table after you run your migrations. After running the migration for associating `people` with `pets`, the `pets` table should resemble:
+
+```txt
+                                     Table "public.pets"
+   Column   |            Type             |                     Modifiers
+------------+-----------------------------+---------------------------------------------------
+ id         | integer                     | not null default nextval('pets_id_seq'::regclass)
+ name       | character varying           |
+ species    | character varying           |
+ dob        | character varying           |
+ created_at | timestamp without time zone | not null
+ updated_at | timestamp without time zone | not null
+ person_id  | integer                     |
+Indexes:
+    "pets_pkey" PRIMARY KEY, btree (id)
+    "index_pets_on_person_id" btree (person_id)
+Foreign-key constraints:
+    "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
+```
+
+After running the migration to associate `places` with `people`, the `people` table should resemble:
+
+```
+                                      Table "public.people"
+   Column    |            Type             |                      Modifiers
+-------------+-----------------------------+-----------------------------------------------------
+ id          | integer                     | not null default nextval('people_id_seq'::regclass)
+ surname     | character varying           |
+ given_name  | character varying           |
+ gender      | character varying           |
+ dob         | character varying           |
+ created_at  | timestamp without time zone | not null
+ updated_at  | timestamp without time zone | not null
+ middle_name | character varying           |
+ place_id    | integer                     |
+Indexes:
+    "people_pkey" PRIMARY KEY, btree (id)
+    "index_people_on_place_id" btree (place_id)
+Foreign-key constraints:
+    "fk_rails_6f429ca703" FOREIGN KEY (place_id) REFERENCES places(id)
+Referenced by:
+    TABLE "pets" CONSTRAINT "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
+```
 
 Plain Ruby Associations
 -----------------------
