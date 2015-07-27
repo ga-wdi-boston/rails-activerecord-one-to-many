@@ -40,7 +40,7 @@ First, diagram the database schema for `people`, `places`, and `pets`. Where are
 
 Next, I'll show you the relationship between `Person` and `Pet`. Then, you'll diagram the relationship between `Person` and `Place`.
 
-Can we access `Pets` from `Place`?
+Can we access `Pet` from `Place`?
 
 Exercise: Migrations
 --------------------
