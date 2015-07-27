@@ -94,6 +94,22 @@ jeff.pets[0] == lucky
 lucky.owner == jeff
 ```
 
+
+Rails: `has_many`
+-----------------
+
+
+
+Rails: `belongs_to`
+-------------------
+
+
+
+Exercise: Creating Associated Records
+-------------------------------------
+
+
+
 Resources
 ---------
 
