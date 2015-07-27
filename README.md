@@ -54,6 +54,45 @@ Exercise: Migrations
 * In [ActiveRecord Migrations](http://edgeguides.rubyonrails.org/active_record_migrations.html), search for "references" in [section 2.1](http://edgeguides.rubyonrails.org/active_record_migrations.html#creating-a-standalone-migration).
 * Also see [section 2.7](http://guides.rubyonrails.org/association_basics.html#choosing-between-belongs-to-and-has-one) in [ActiveRecord Associations](http://guides.rubyonrails.org/association_basics.html).
 
+Plain Ruby Associations
+-----------------------
+
+```ruby
+class Person
+  attr_reader :given_name, :surname
+  attr_accessor :pets
+
+  def initialize(given_name, surname)
+    @given_name, @surname = given_name, surname
+    @pets = []
+  end
+end
+```
+
+
+```ruby
+class Pet
+  attr_reader :name, :species
+  attr_accessor :owner
+
+  def initialize(name, species)
+    @name, @species = name, species
+    @owner = nil
+  end
+end
+```
+
+
+```ruby
+jeff = Person.new("Jeff", "Horn")
+lucky = Pet.new("Lucky", "cat")
+
+jeff.pets << lucky
+lucky.owner = jeff
+
+jeff.pets[0] == lucky
+lucky.owner == jeff
+```
 
 Resources
 ---------
