@@ -38,7 +38,7 @@ Exercise: ERDs
 
 First, diagram the database schema for `people`, `places`, and `pets`. Where are foreign keys stored? What are the names of the foreign key columns?
 
-Next, I'll show you the relationship between `Person` and `Pet`. Then, you'll diagram the relationship between `Person` and `Place`.
+Next, I'll show you the relationship between `Person` and `Pet`. Then, you'll diagram the relationship between `Person` and `Place`. What is the top-level container as modeled? Is this clearly a hierarchical series of relationships?
 
 Can we access `Pet` from `Place`?
 
