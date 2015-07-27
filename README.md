@@ -9,8 +9,8 @@ Objectives
 ----------
 
 * Digram the database tables and Entity Relationship Diagram that describe a parent-child relationship.
-* Associate plain Ruby objects with one another.
 * Write a migration for a parent-child relationship.
+* Associate plain Ruby objects with one another.
 * Compare `has_many` and `belongs_to` to other macros, like `attr_accessor`.
 * Configure ActiveRecord to manage parent-child relationships using `has_many` and `belongs_to`.
 * Create associated records using the rails console.
