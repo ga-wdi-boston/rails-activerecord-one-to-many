@@ -42,6 +42,18 @@ Next, I'll show you the relationship between `Person` and `Pet`. Then, you'll di
 
 Can we access `Pets` from `Place`?
 
+Exercise: Migrations
+--------------------
+
+**REVIEW:** Generate a migration for `pets`. `pets` should have a `name`, a `species`, and a `dob`.
+
+**RESEARCH:** Write a migration to associate `people` with `pets`. Next, write a migration to associate `people` with `places`.
+
+**NOTE:** There is more than one way to do this. You can write your migrations and column names by hand, or you can use a special migration syntax to auto-generate the migration for you.
+
+* In [ActiveRecord Migrations](http://edgeguides.rubyonrails.org/active_record_migrations.html), search for "references" in [section 2.1](http://edgeguides.rubyonrails.org/active_record_migrations.html#creating-a-standalone-migration).
+* Also see [section 2.7](http://guides.rubyonrails.org/association_basics.html#choosing-between-belongs-to-and-has-one) in [ActiveRecord Associations](http://guides.rubyonrails.org/association_basics.html).
+
 
 Resources
 ---------
