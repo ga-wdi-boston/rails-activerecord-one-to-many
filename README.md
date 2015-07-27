@@ -121,6 +121,12 @@ Referenced by:
 Plain Ruby Associations
 -----------------------
 
+Now that we have foreign keys in place for our relationships, we can use ActiveRecord to associate different records with one-another. However, we should pause to understand what associations look like *in-memory* before saving them to the database.
+
+Suppose we don't have a database backing our app. Just as we modeled objects when learning about object-oriented programming, we can model associations using the concept of "collection" properties on parent objects. After inspecting these examples, I hope you realize there's not much special about ActiveRecord associations other than the setters, getters, and persistence callbacks they provide.
+
+Let's start by modeling a `Person` with a plain Ruby object (a plain Ruby object is just an object that doesn't inherit directly from rails). In this simplified example, we want to set a person's `given_name` and `surname` when creating an instance, and we also want to have access to a `pets` property that holds an array of `Pet` objects (we'll define `Pet` in a moment).
+
 ```ruby
 class Person
   attr_reader :given_name, :surname
@@ -133,6 +139,7 @@ class Person
 end
 ```
 
+Next, let's define `Pet`. A pet has a `name` and a `species` when instantiated, and also has an `owner` property that we can access to set the pet's only `owner`.
 
 ```ruby
 class Pet
@@ -146,6 +153,7 @@ class Pet
 end
 ```
 
+Now, let's create a `Person` and a `Pet`, and associate them with one-another. We associate objects by creating a reference to the associated object in a property on the host object. In our example, we'll create a new `Pet` and a new `Person`, and save the new pet as part of the `Person#pets` collection. We'll also save the new person as in `Pet#owner`. The reason we do both is to have access to the associated object now matter whether we have a `Pet` or `Person` at hand.
 
 ```ruby
 jeff = Person.new("Jeff", "Horn")
@@ -156,8 +164,13 @@ lucky.owner = jeff
 
 jeff.pets[0] == lucky
 lucky.owner == jeff
+
+lucky.owner.pets[0] == lucky
 ```
 
+In the last few lines, we see that the object referenced as the first member of the `pets` collection on `jeff` is the same instance we added previously. Additionally, we can see that always have access to associated objects no matter where we are in an access chain.
+
+Take a moment and digram an ERD for these object relationships. Is it any different from the ERD that associated `Pet` and `Person` before? What can we conclude about the usefulness of ERDs for modeling relationships?
 
 Rails: `has_many`
 -----------------
