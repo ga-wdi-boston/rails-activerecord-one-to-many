@@ -233,7 +233,27 @@ Each of you will research one method. Describe what the method does in your own 
 Exercise: Creating Associated Records
 -------------------------------------
 
-We need to set up ActiveRecord to handle our one-to-many relationship from `Person` to `Pet`. Open `app/models/person.rb` and add `has_many :pets`. Next, open `app/models/pet.rb` and add `belongs_to :person`. Since we've already completed our migration that adds `person_id` to the `pets` table, we can use ActiveRecord association setter methods to create an association between a person and a pet.
+We need to set up ActiveRecord to handle our one-to-many relationship from `Person` to `Pet`. Open `app/models/person.rb` and add edit it.
+
+```ruby
+class Person < ActiveRecord::Base
+  has_many :pets, inverse_of: :person
+end
+```
+
+It is best practice to include `inverse_of` options on each of our associations. It helps rails keep memory in-sync with changes in the database. In this case, `Pet` is a many-to-one relationship with `Person`, so we use the plural `:pets` and the singular `:person`.
+
+Next, create `app/models/pet.rb`.
+
+```ruby
+class Pet < ActiveRecord::Base
+  belongs_to :person, inverse_of: :pets
+end
+```
+
+In this case, we read our relationship in the other direction. `Person` is a one-to-many relationship with `Pet`, so we use the singular `:person` and the plural `:pets`.
+
+Since we've already completed our migration that adds `person_id` to the `pets` table, we can use ActiveRecord association setter methods to create an association between a person and a pet.
 
 Enter `rails db`. Query the `pets` table. It should be empty.
 
@@ -254,13 +274,19 @@ Exit and re-enter `rails console`.
 lucky = Pet.last
 jeff = Person.last
 
-lucky.owner == jeff
+lucky.person == jeff
 ```
 
 The last line should return `true`. ActiveRecord took care of setting up the association in both directions.
 
 Lab: Creating Associated Records
 -------------------------------------
+
+Create the relationship between `Person` and `Place` by putting `has_many` and `belongs_to` in the appropriate models. Don't forget your `inverse_of` options. Note that we've already created the migrations we needed at the beginning of this lesson.
+
+Test your associations by adding a person to a place through the `rails console`. Inspect the data in `rails db`. Does it look as you'd expect?
+
+Now, try creating an association in the opposite direction: add a place to a different person and check your changes.
 
 Resources
 ---------
