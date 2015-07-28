@@ -233,7 +233,34 @@ Each of you will research one method. Describe what the method does in your own 
 Exercise: Creating Associated Records
 -------------------------------------
 
+We need to set up ActiveRecord to handle our one-to-many relationship from `Person` to `Pet`. Open `app/models/person.rb` and add `has_many :pets`. Next, open `app/models/pet.rb` and add `belongs_to :person`. Since we've already completed our migration that adds `person_id` to the `pets` table, we can use ActiveRecord association setter methods to create an association between a person and a pet.
 
+Enter `rails db`. Query the `pets` table. It should be empty.
+
+Exit and then enter `rails console`.
+
+```ruby
+jeff = Person.create!(given_name: "Jeffrey", surname: "Horn")
+lucky = Pet.create!(name: "Lucky", species: "cat")
+
+jeff.pets << lucky
+```
+
+Exit and re-enter `rails db`. Query the `pets` table and the `person` table. The `person_id` in the `pets` table for the pet you just created should equal the `id` in the `people` table for the person you just created.
+
+Exit and re-enter `rails console`.
+
+```ruby
+lucky = Pet.last
+jeff = Person.last
+
+lucky.owner == jeff
+```
+
+The last line should return `true`. ActiveRecord took care of setting up the association in both directions.
+
+Lab: Creating Associated Records
+-------------------------------------
 
 Resources
 ---------
