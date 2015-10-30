@@ -3,7 +3,7 @@
 Rails: `has_many` \& `belongs_to`
 =================================
 
-So far you've seen how to associate records with on another using foreign keys in a database. Just as we can use ActiveRecord to read, change, update, and delete data from our database, we can use ActiveRecord relationship methods to associate records with one another using Ruby code.
+So far you've seen how to associate records with on another using foreign keys in a database. Just as we can use ActiveRecord to read, change, update, and delete data from our database, we can use ActiveRecord relationship methods to associate ActiveRecord models with one another using Ruby code.
 
 Objectives
 ----------
@@ -22,12 +22,21 @@ Fork and clone this repo. Change into the appropriate directory and update depen
 
 Next, create your database, migrate, and seed. Start your web server.
 
+*You may have to drop the DB if you already have a DB named `rails_has_many_development`.*.
+
+```bash
+rake db:create
+rake db:migrate
+```
+
 Follow along with your instructor, closing your laptop if requested.
 
 Entity Relationship Diagrams (ERDs)
 -----------------------------------
 
-It is often useful to organize our thoughts about the entities in our application before we generate models and migrations. We'll use a simplified diagram syntax that is derived from [UML](http://www.uml.org).
+It is often useful to organize our thoughts about the entities in our application before we generate models and migrations. We'll use a simplified diagram syntax that is derived from [UML](lesson/simple_uml.md).
+
+Another common way to create data models is to use [ERD](http://www.codeproject.com/Articles/878359/Data-modelling-using-ERD-with-Crow-Foot-Notation).
 
 **NOTE:** If you look into data modeling on your own, you might run across some terms that people in the rails community don't often use. These include describing relationships using plurals ("one-to-many", "many-to-many", "many-to-one", etc.). Because rails uses common-language names for its relationship macros (`has_many` and `belongs_to`), these general terms are sometimes preferred since they are not loaded with the concept of "ownership". I will often refer to these as parent-child relationships since "one-to-many" relationships are the basis of hierarchical structures. Finally, "parent" objects can be thought of as "containers" or "collections", like folders in the file system.
 
