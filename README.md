@@ -1,19 +1,20 @@
 ![General Assembly Logo](http://i.imgur.com/ke8USTq.png)
 
-Rails: `has_many` \& `belongs_to`
-=================================
+## Rails: `has_many` \& `belongs_to`
+
 
 So far you've seen how to associate records with on another using foreign keys in a database. Just as we can use ActiveRecord to read, change, update, and delete data from our database, we can use ActiveRecord relationship methods to associate ActiveRecord models with one another using Ruby code.
 
 Objectives
 ----------
 
-* Digram the database tables and Entity Relationship Diagram that describe a parent-child relationship.
+* Diagram the database tables and Entity Relationship Diagram that describe a parent-child relationship.
 * Write a migration for a parent-child relationship.
-* Associate plain Ruby objects with one another.
-* Compare `has_many` and `belongs_to` to other macros, like `attr_accessor`.
 * Configure ActiveRecord to manage parent-child relationships using `has_many` and `belongs_to`.
 * Create associated records using the rails console.
+* Associate plain Ruby objects with one another.
+* Compare `has_many` and `belongs_to` to other macros, like `attr_accessor`.
+
 
 Instructions
 ------------
@@ -38,6 +39,8 @@ We'll use a subset of Crows Foot Notation to diagram relationships between Model
 
 
 ![Person Place Model](./lesson/images/person_place.png)
+
+One Place has many People. There is a a one to many relationship between Place and People.
 
 ## Implementing the Data Model
 
@@ -102,7 +105,7 @@ end
 
 > Here we see that we have two models, **People** and **Places**.
 
-> We can see how the schema defines the tables and columns for each model. **And we notice that there is NO relationships between the people and places models**. We should fix that!
+> We can see how the schema defines the tables and columns for each model. **And we notice that there are NO relationships between the people and places models**. We should fix that!
 
 > But, first lets create ActiveRecord models for Person and Place.
 
@@ -138,9 +141,12 @@ $ rails console
 
 Check the Database using `$ rails db`. Make sure that you understand each table, it's columns and the columns datatypes.
 
-What commands are you using to check the schema?
+* What commands are you using to check the schema?
 
-Create a couple of rows for each table in the rails console and check that the database has been updated using `$ rails db`.
+* Create a couple of rows for each table using `$ rails console` and check that the database has been updated using `$ rails db`.
+
+* Diagram the physical model, that is each table in the DB and their columns. *Keep this around, we'll be updating it as we continue.*
+
 
 
 ## Active Record Associations
@@ -148,10 +154,15 @@ Create a couple of rows for each table in the rails console and check that the d
 ![Person Place Model](./lesson/images/person_place.png)
 
 
-As the above data model indicates there is a relationship between the Person and Place models. The Place model **has many** people and a person **belongs to** a place. 
+As the above data model indicates there is a relationship/association between the Person and Place models. The Place model **has many** people and a person **belongs to** a place. 
 
 These **has many** and **belongs to** relationships/associations are implemented in the database by using **foreign keys**. And they are implemented in ActiveRecord Models by using **belongs_to** association and the **has_many** association. [See Active Record Associations](http://guides.rubyonrails.org/association_basics.html)
 
+### Terminology
+
+In the above relationship we often say that there is a **parent-child** relationship. In this case **Place is the parent and Person is the child.**
+
+Also, we'll say that Place has a **collection** of people. And that there is a **one to many** association between these two entities. **One Place will have many People**.
 ### Implement the Person to Place Association 
 
 
@@ -179,7 +190,7 @@ end
 $ rails migrate
 ```
 
-> Check the db with `$ rails db`. We should now see a place_id column that is foreign key.
+> Check the db with `$ rails db`. We should now see a place_id column that is foreign key from the people table to the places table.
 
 ```text
 \d people                                               
@@ -203,12 +214,134 @@ Foreign-key constraints:
 > Notice the foreign-key constraint:  `"fk_rails_6f429ca703" FOREIGN KEY (place_id) REFERENCES places(id)`
 > 
 
-#### Create the Associtions in the AR Models.
+#### Create the Associations in the AR Models.
 
 > In the Person model add the **belongs to** association.
 
 ```ruby
+class Person < ActiveRecord::Base
+  belongs_to :place
+end
+```
 
+> In the Place model add the **has many** association.
+
+```ruby
+class Place < ActiveRecord::Base
+  has_many :people
+end
+```
+
+#### Create Associations between People and Places.
+
+> Open up the rails console and create a Place.
+
+```ruby
+> Place.create(city: 'Boston', state: 'Ma', country: 'US', population: 646_000)
+>
+> boston = Place.first
+
+```
+> Create a Person that lives in a Place.
+
+```ruby
+> boston.people.create!(given_name: 'Jill', last_name: 'Smith', gender: 'female', dob: '4/22/88')
+```
+
+Notice how we now have a `people` method for each place! How did we get this method?
+
+The **has_many** method added this, an other methods, to the Place model automatically. When we invoke this `people` method it will generate a SQL SELECT to find all the people that have the foreign key for this Place.
+
+> Open the `$ rails console`
+
+```ruby
+> boston = Place.first
+> boston.people
+=>   Person Load (0.5ms)  SELECT "people".* FROM "people" WHERE "people"."place_id" = $1  [["place_id", 1]]
+...
+```
+
+See how we are generating and running the SQL SELECT need to find all the people with boston's primary key.
+
+
+## Rails: `has_many`
+
+
+Including `has_many` in an ActiveRecord model defines a series of methods on the model for accessing an associated **collection** of objects. For example, if we have a `Place` model and include `has_many :people`, we will be able to get a particular place's entire set of people by `Place.find(1).people`.
+
+Just like `attr_accessor`, `has_many` is a macro that defines methods for us. You can think of the methods it defines as specialized setters and getters, as well as additional methods for dealing with database records. A list of all the methods generated by `has_many` can be found in the [ActiveRecord::Associations::ClassMethods documentation](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many).
+
+Supposing a `Place` that `has_many :people`, the list of generated methods is:
+
+1. `Place#people`
+1. `Place#people<<`
+1. `Place#people.delete`
+1. `Place#people.destroy`
+1. `Place#people=`
+1. `Place#person_ids`
+1. `Place#person_ids=`
+1. `Place#people.clear`
+1. `Place#people.empty?`
+1. `Place#people.size`
+1. `Place#people.find`
+1. `Place#people.exists?(name: 'ACME')`
+1. `Place#people.build`
+1. `Place#people.create`
+1. `Place#people.create!`
+
+## You Do: `has_many` Methods
+
+Each of you will research one method. Describe what the method does in your own words. Is it a setter, a getter, or something else? Then, give an example of another one-to-many relationship, where you would define `has_many`, and how you would use the method you just researched.
+
+## Rails: `belongs_to`
+
+
+Including `belongs_to` in an ActiveRecord model defines a series of methods on the model for accessing a **single** associated object. For example, if we have a 
+
+> Open the `$ rails console`
+
+```ruby
+> jill = Person.first
+> jill.place
+=> SELECT  "places".* FROM "places" WHERE "places"."id" = $1 LIMIT 1  [["id", 1]]
+```
+
+The **belongs_to** create the `place` method that will generate and run a SQL SELECT statement to find the Place that jill belongs to.
+
+
+How do you decide where to put the `has_many` and `belongs_to` macros? Well, you can ask yourself a few questions:
+
+1. Is the model associated with a collection? If yes, include `has_many`.
+1. Is the model associated with a single object? If yes, include `has_one` or `belongs_to`.
+1. Does the model's database table hold a foreign key column? If yes, include `belongs_to`.
+
+The "children" in parent-child relationships, or the "many" in one-to-many relationships hold the foreign key, and therefore will need `belongs_to` on the ActiveRecord model.
+
+`belongs_to` defines several methods for us. A list of the methods generated by `belongs_to` can be found in the [ActiveRecord::Associations::ClassMethods documentation](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-belongs_to)
+
+Supposing a `Person` that `belongs_to :place`, the list of generated methods is:
+
+1. `Person#place`
+1. `Person#place=(place)`
+1. `Person#build_place`
+1. `Person#create_place`
+1. `Person#create_place!`
+
+## You Do: Creating Associated Records
+-------------------------------------
+
+Create the relationship between `Person` and `Pet` by putting `has_many` and `belongs_to` in the appropriate models.
+
+Each Pet belongs to a Person and each Person has many Pets.
+
+* Create and apply the migration, use the rails generator to create the migration.
+* Check that the migration worked by checking the DB tables.
+* Create the Active Record models and the has_many and belongs_to.
+* Create a couple of Pets and People in the rails console.
+	* Associate a pet with a person using an instance of a parent, Person, pets method.
+	* Associate a pet with a person using an instance of a the child, Pet, person method. 
+* Check the DB to make sure the correct foreign keys are being created.
+* Find the SQL that is generated and invoked.
 
 ###Plain Ruby Associations
 
@@ -263,121 +396,6 @@ In the last few lines, we see that the object referenced as the first member of 
 
 Take a moment and digram an ERD for these object relationships. Is it any different from the ERD that associated `Pet` and `Person` before? What can we conclude about the usefulness of ERDs for modeling relationships?
 
-Rails: `has_many`
------------------
-
-Including `has_many` in an ActiveRecord model defines a series of methods on the model for accessing an associated **collection** of objects. For example, if we have a `Firm` model and include `has_many :clients`, we will be able to get a particular consultant's entire set of clients by `Firm.find(1).clients`.
-
-Just like `attr_accessor`, `has_many` is a macro that defines methods for us. You can think of the methods it defines as specialized setters and getters, as well as additional methods for dealing with database records. A list of all the methods generated by `has_many` can be found in the [ActiveRecord::Associations::ClassMethods documentation](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many).
-
-Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
-
-1. `Firm#clients`
-1. `Firm#clients<<`
-1. `Firm#clients.delete`
-1. `Firm#clients.destroy`
-1. `Firm#clients=`
-1. `Firm#client_ids`
-1. `Firm#client_ids=`
-1. `Firm#clients.clear`
-1. `Firm#clients.empty?`
-1. `Firm#clients.size`
-1. `Firm#clients.find`
-1. `Firm#clients.exists?(name: 'ACME')`
-1. `Firm#clients.build`
-1. `Firm#clients.create`
-1. `Firm#clients.create!`
-
-Exercise: `has_many` Methods
-----------------------------
-
-Each of you will research one method. Describe what the method does in your own words. Is it a setter, a getter, or something else? Then, give an example of another one-to-many relationship, where you would define `has_many`, and how you would use the method you just researched.
-
-Rails: `belongs_to`
--------------------
-
-Including `belongs_to` in an ActiveRecord model defines a series of methods on the model for accessing a **single** associated object. For example, if we have a `Post` model and include `belongs_to :author`, we will be able to get a particular post's author by `Post.find(1).author`.
-
-How do you decide where to put the `has_many` and `belongs_to` macros? Well, you can ask yourself a few questions:
-
-1. Is the model associated with a collection? If yes, include `has_many`.
-1. Is the model associated with a single object? If yes, include `has_one` or `belongs_to`.
-1. Does the model's database table hold a foreign key column? If yes, include `belongs_to`.
-
-The "children" in parent-child relationships, or the "many" in one-to-many relationships hold the foreign key, and therefore will need `belongs_to` on the ActiveRecord model.
-
-`belongs_to` defines several methods for us. A list of the methods generated by `belongs_to` can be found in the [ActiveRecord::Associations::ClassMethods documentation](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-belongs_to)
-
-Supposing a `Post` that `belongs_to :author`, the list of generated methods is:
-
-1. `Post#author`
-1. `Post#author=(author)`
-1. `Post#build_author`
-1. `Post#create_author`
-1. `Post#create_author!`
-
-Exercise: `belongs_to` Methods
-----------------------------
-
-Each of you will research one method. Describe what the method does in your own words. Is it a setter, a getter, or something else?
-
-Exercise: Creating Associated Records
--------------------------------------
-
-We need to set up ActiveRecord to handle our one-to-many relationship from `Person` to `Pet`. Open `app/models/person.rb` and add edit it.
-
-```ruby
-class Person < ActiveRecord::Base
-  has_many :pets, inverse_of: :person
-end
-```
-
-It is best practice to include `inverse_of` options on each of our associations. It helps rails keep memory in-sync with changes in the database. In this case, `Pet` is a many-to-one relationship with `Person`, so we use the plural `:pets` and the singular `:person`.
-
-Next, create `app/models/pet.rb`.
-
-```ruby
-class Pet < ActiveRecord::Base
-  belongs_to :person, inverse_of: :pets
-end
-```
-
-In this case, we read our relationship in the other direction. `Person` is a one-to-many relationship with `Pet`, so we use the singular `:person` and the plural `:pets`.
-
-Since we've already completed our migration that adds `person_id` to the `pets` table, we can use ActiveRecord association setter methods to create an association between a person and a pet.
-
-Enter `rails db`. Query the `pets` table. It should be empty.
-
-Exit and then enter `rails console`.
-
-```ruby
-jeff = Person.create!(given_name: "Jeffrey", surname: "Horn")
-lucky = Pet.create!(name: "Lucky", species: "cat")
-
-jeff.pets << lucky
-```
-
-Exit and re-enter `rails db`. Query the `pets` table and the `person` table. The `person_id` in the `pets` table for the pet you just created should equal the `id` in the `people` table for the person you just created.
-
-Exit and re-enter `rails console`.
-
-```ruby
-lucky = Pet.last
-jeff = Person.last
-
-lucky.person == jeff
-```
-
-The last line should return `true`. ActiveRecord took care of setting up the association in both directions.
-
-Lab: Creating Associated Records
--------------------------------------
-
-Create the relationship between `Person` and `Place` by putting `has_many` and `belongs_to` in the appropriate models. Don't forget your `inverse_of` options. Note that we've already created the migrations we needed at the beginning of this lesson.
-
-Test your associations by adding a person to a place through the `rails console`. Inspect the data in `rails db`. Does it look as you'd expect?
-
-Now, try creating an association in the opposite direction: add a place to a different person and check your changes.
 
 Resources
 ---------
