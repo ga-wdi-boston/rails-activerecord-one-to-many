@@ -29,7 +29,81 @@ rake db:create
 rake db:migrate
 ```
 
-Follow along with your instructor, closing your laptop if requested.
+
+## Data Modelling
+
+Data Modelling in a field in and of itself. We'll not dive into the this very deep. A common way to create data models is to use [Crows Foot Notation](http://www.codeproject.com/Articles/878359/Data-modelling-using-ERD-with-Crow-Foot-Notation) to create a Entity Relationship Diagram(ERD).
+
+We'll use a subset of Crows Foot Notation to diagram relationships between Models/Entities.
+
+
+![Person Place Model](./lesson/images/person_place.png)
+## Implementing the Data Model
+
+Lets use [Rails Migrations](http://guides.rubyonrails.org/active_record_migrations.html) to generate database schema using SQL Data Definition statements ([DDL](http://www.tomjewett.com/dbdesign/dbdesign.php?page=ddldml.php)).
+
+`rails generate migration ... ==> migrations ==> DDL`
+
+For help with Rails Migrations see:  
+
+*  [Active Record Migrations](http://guides.rubyonrails.org/active_record_migrations.html), search for `rails generate`.
+* $ rails generate migration
+* [Migration Native Types](http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html#method-i-column)
+* [Rails Schema Statements](http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html)
+
+
+
+#### Person and Place.
+
+> First, we'll create Person model. 
+ 
+```bash
+$ rails g migration CreatePerson given_name:string middle_name:string last_name:string gender:string  dob:string
+```
+
+> Then we'll create a Place model
+
+```bash
+$ rails g migration CreatePlace city state country population:integer
+```
+
+Let's take a look at the current data model. Open up db/schema.rb.
+
+```ruby
+ActiveRecord::Schema.define(version: 20150722160205) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "people", force: :cascade do |t|
+    t.string   "surname"
+    t.string   "given_name"
+    t.string   "gender"
+    t.string   "dob"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "middle_name"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string   "city"
+    t.string   "state"
+    t.integer  "population"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "country"
+  end
+
+end
+
+```
+
+Here we see that we two models, **People** and **Places**. We can see that each model and it's associated DB tables were created by the migrations in the `db/migrate` directory. 
+
+Let's take a quick look at these files.
+
+We see how the migrations define the tables and columns of specific data types. **And we notice that there is NO relationships between the people and places**. We should fix that!
+
 
 Entity Relationship Diagrams (ERDs)
 -----------------------------------
@@ -38,7 +112,6 @@ It is often useful to organize our thoughts about the entities in our applicatio
 
 Another common way to create data models is to use [ERD](http://www.codeproject.com/Articles/878359/Data-modelling-using-ERD-with-Crow-Foot-Notation).
 
-**NOTE:** If you look into data modeling on your own, you might run across some terms that people in the rails community don't often use. These include describing relationships using plurals ("one-to-many", "many-to-many", "many-to-one", etc.). Because rails uses common-language names for its relationship macros (`has_many` and `belongs_to`), these general terms are sometimes preferred since they are not loaded with the concept of "ownership". I will often refer to these as parent-child relationships since "one-to-many" relationships are the basis of hierarchical structures. Finally, "parent" objects can be thought of as "containers" or "collections", like folders in the file system.
 
 We'll list our entities in boxes and draw arrows denoting the relationships. We denote number on the end of the tails to communicate the type of relationship we are defining.
 
