@@ -263,6 +263,22 @@ The **has_many** method added this, an other methods, to the Place model automat
 
 See how we are generating and running the SQL SELECT need to find all the people with boston's primary key.
 
+We'll use to the results of this SQL SELECT to create a collection of `people` that the `people` method will refer to.
+
+Each row found in the people table with an id of 1 will be used to create one Person instance in the `people` collection.
+
+## You Do:
+
+In the `$ rails console`:
+
+* Create one more place.
+* Add two people to this place. 
+* Check the DB to view changes in the places and and people table.
+* Draw a physical model of these tables, columns and rows.
+* Draw lines between the people and places table to indicate which people belong to which place.
+* Seed the DB with data for your people and places. Yep, create code in `db/seeds.rb` to populate the db. *Don't forget to run `rake db:seed` when done*.
+
+
 
 ## Rails: `has_many`
 
@@ -330,18 +346,20 @@ Supposing a `Person` that `belongs_to :place`, the list of generated methods is:
 ## You Do: Creating Associated Records
 -------------------------------------
 
-Create the relationship between `Person` and `Pet` by putting `has_many` and `belongs_to` in the appropriate models.
+Create the relationship between People and Pets. People will **have many** pets and Pets will **belong to** a person. 
 
-Each Pet belongs to a Person and each Person has many Pets.
+Each Pet will have a name and a species.
 
+* Draw the Data Model using Crows Foot Notation.
 * Create and apply the migration, use the rails generator to create the migration.
 * Check that the migration worked by checking the DB tables.
-* Create the Active Record models and the has_many and belongs_to.
+* Create the Active Record models with the appropriate  `has_many` and `belongs_to`.
 * Create a couple of Pets and People in the rails console.
-	* Associate a pet with a person using an instance of a parent, Person, pets method.
-	* Associate a pet with a person using an instance of a the child, Pet, person method. 
+	* Create and associate a pet with a person. Invoke the `create!` method on the Person's `pets` method.
+	* Associate a pet with a person. Invoke the `person` method on a pet.
 * Check the DB to make sure the correct foreign keys are being created.
 * Find the SQL that is generated and invoked.
+* Seed the DB with these pets and people.
 
 ###Plain Ruby Associations
 
