@@ -152,10 +152,63 @@ As the above data model indicates there is a relationship between the Person and
 
 These **has many** and **belongs to** relationships/associations are implemented in the database by using **foreign keys**. And they are implemented in ActiveRecord Models by using **belongs_to** association and the **has_many** association. [See Active Record Associations](http://guides.rubyonrails.org/association_basics.html)
 
-### Implement the Associations
+### Implement the Person to Place Association 
+
+
+#### Create the foreign key in the People table.
 
 > Lets add a foreign key to the people table to create this relationship in the database.
- 
+
+```bash
+$ rails g migration AddPlaceRefToPeople place:references
+```
+
+> This will generate a migration to create a foreign key in the people table to reference the places table.
+
+```ruby
+class AddPlaceRefToPeople < ActiveRecord::Migration
+  def change
+    add_reference :people, :place, index: true, foreign_key: true
+  end
+end
+```
+
+> Apply the migration.
+
+```bash
+$ rails migrate
+```
+
+> Check the db with `$ rails db`. We should now see a place_id column that is foreign key.
+
+```text
+\d people                                               
+                                 Table "public.people"                                                      
+   Column    |       Type        |                      Modifiers                                           
+-------------+-------------------+-----------------------------------------------------                     
+ id          | integer           | not null default nextval('people_id_seq'::regclass)                      
+ given_name  | character varying |                                                                          
+ middle_name | character varying |                                                                          
+ last_name   | character varying |                                                                          
+ gender      | character varying |                                                                          
+ dob         | character varying |                                                                          
+ place_id    | integer           |                                                                          
+Indexes:                                                                                                    
+    "people_pkey" PRIMARY KEY, btree (id)                                                                   
+    "index_people_on_place_id" btree (place_id)                                                             
+Foreign-key constraints:                                                                                    
+    "fk_rails_6f429ca703" FOREIGN KEY (place_id) REFERENCES places(id)
+```
+
+> Notice the foreign-key constraint:  `"fk_rails_6f429ca703" FOREIGN KEY (place_id) REFERENCES places(id)`
+> 
+
+#### Create the Associtions in the AR Models.
+
+> In the Person model add the **belongs to** association.
+
+```ruby
+
 
 ###Plain Ruby Associations
 
