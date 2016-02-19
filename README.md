@@ -23,7 +23,7 @@ Just as we can use ActiveRecord to read, change, update, and delete data from
 
 Fork, clone, branch (training), and `bundle install`.
 
-Next, create your database, migrate, and seed. Start your web server.
+Next, create your database, migrate, and seed.
 
 Follow along with your instructor, closing your laptop if requested.
 
@@ -51,15 +51,15 @@ We denote number on the end of the tails to communicate the type of relationship
 
 ### Code along: ERDs
 
-First, diagram the database schema for `people`, `places`, and `pets`.
+First, diagram the database schema for `people`, `cities`, and `pets`.
 Where are foreign keys stored? What are the names of the foreign key columns?
 
 Next, I'll show you the relationship between `Person` and `Pet`.
-Then, you'll diagram the relationship between `Person` and `Place`.
+Then, you'll diagram the relationship between `Person` and `City`.
 What is the top-level container as modeled?
 Is this clearly a hierarchical series of relationships?
 
-Can we access `Pet` from `Place`?
+Can we access `Pet` from `City`?
 
 ## Code along: Migrations
 
@@ -86,7 +86,7 @@ Indexes:
 ```
 
 **RESEARCH:** Write a migration to associate `people` with `pets`.
-Next, write a migration to associate `people` with `places`.
+Next, write a migration to associate `people` with `cities`.
 After writing each migration, inspect the migration and run `rake db:migrate`.
 If you need to make changes, run `rake db:rollback`, edit the migration, and
  re-run the migrations.
@@ -131,7 +131,7 @@ Foreign-key constraints:
     "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
 ```
 
-After running the migration to associate `places` with `people`, the `people`
+After running the migration to associate `cities` with `people`, the `people`
  table should resemble:
 
 ```text
@@ -146,19 +146,19 @@ After running the migration to associate `places` with `people`, the `people`
  created_at  | timestamp without time zone | not null
  updated_at  | timestamp without time zone | not null
  middle_name | character varying           |
- place_id    | integer                     |
+ city_id    | integer                     |
 Indexes:
     "people_pkey" PRIMARY KEY, btree (id)
-    "index_people_on_place_id" btree (place_id)
+    "index_people_on_city_id" btree (city_id)
 Foreign-key constraints:
-    "fk_rails_6f429ca703" FOREIGN KEY (place_id) REFERENCES places(id)
+    "fk_rails_6f429ca703" FOREIGN KEY (city_id) REFERENCES citys(id)
 Referenced by:
     TABLE "pets" CONSTRAINT "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
 ```
 
 ## Plain Ruby Associations
 
-Now that we have foreign keys in place for our relationships, we can use
+Now that we have foreign keys in city for our relationships, we can use
  ActiveRecord to associate different records with one-another.
 However, we should pause to understand what associations look like *in-memory*
  before saving them to the database.
@@ -374,17 +374,17 @@ ActiveRecord took care of setting up the association in both directions.
 
 ## Lab: Creating Associated Records
 
-Create the relationship between `Person` and `Place` by putting `has_many` and
+Create the relationship between `Person` and `City` by putting `has_many` and
  `belongs_to` in the appropriate models.
 Don't forget your `inverse_of` options.
 Note that we've already created the migrations we needed at the beginning of
  this lesson.
 
-Test your associations by adding a person to a place through the
+Test your associations by adding a person to a city through the
  `rails console`.
 Inspect the data in `rails db`. Does it look as you'd expect?
 
-Now, try creating an association in the opposite direction: add a place to a
+Now, try creating an association in the opposite direction: add a city to a
  different person and check your changes.
 
 ## Resources
