@@ -27,7 +27,7 @@ Next, create your database, migrate, and seed.
 
 Follow along with your instructor, closing your laptop if requested.
 
-## Entity Relationship Diagrams (ERDs)
+## Entity Relationship Diagram (ERD)
 
 It is often useful to organize our thoughts about the entities in our
  application before we generate models and migrations.
