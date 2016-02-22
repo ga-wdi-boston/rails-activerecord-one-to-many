@@ -54,10 +54,11 @@ We'll look at the relationship between `Person` and `Pet`.
 
 ### Lab: Person and City
 
-Then, you'll diagram the relationship between `Person` and `City`.
-What is the top-level container as modeled?
-Is this clearly a hierarchical series of relationships?
-Can we access `Pet` from `City`?
+We'll diagram the relationship between `Person` and `City`.
+
+-   What is the top-level container as modeled?
+-   Is this clearly a hierarchical series of relationships?
+-   Can we access `Pet` from `City`?
 
 ## Lab: Migrations
 
@@ -76,7 +77,7 @@ Do the columns look as you'd expect? Your output should resemble:
 ------------+-----------------------------+---------------------------------------------------
  id         | integer                     | not null default nextval('pets_id_seq'::regclass)
  born_on    | date                        |
- species    | character varying           |
+ kind       | character varying           |
  name       | character varying           |
  created_at | timestamp without time zone | not null
  updated_at | timestamp without time zone | not null
@@ -84,8 +85,14 @@ Indexes:
     "pets_pkey" PRIMARY KEY, btree (id)
 ```
 
-**RESEARCH:** Write a migration to associate `pets` with `people`.
-Next, write a migration to associate `people` with `cities`.
+Load the data for people, cities, and pets using:
+
+```sh
+rake db:populate:all
+```
+
+**RESEARCH:** Write a migration to associate `pets` with `people` as `owner`.
+Next, write a migration to associate `people` with `cities` as `born_in`.
 After writing each migration, inspect the migration and then run `rake
  db:migrate`.
 If you need to make changes, run `rake db:rollback`, edit the migration, and
@@ -98,12 +105,15 @@ To "nuke and pave":
 rake db:drop db:create db:migrate db:populate:all
 ```
 
-**NOTE:** There is more than one way to write association migrations.
+There is more than one way to write association migrations.
 You can write your migrations and column names by hand, or you can use a special
  migration syntax to auto-generate the migration for you.
 If you write your migrations by hand, be sure to add the appropriately named
  column, add an index, and add a foreign key constraint.
 If you use the special generator syntax, this will be done for you.
+
+**NOTE:** If you want non-default names, as we do for `owner` and `born_in`,
+ you'll need to edit the migration to use the extended syntax.
 
 -   In [ActiveRecord Migrations](http://edgeguides.rubyonrails.org/active_record_migrations.html),
  search for "references" in [section 2.1](http://guides.rubyonrails.org/active_record_migrations.html#creating-a-standalone-migration).
@@ -119,7 +129,7 @@ table should resemble:
 ------------+-----------------------------+---------------------------------------------------
  id         | integer                     | not null default nextval('pets_id_seq'::regclass)
  name       | character varying           |
- species    | character varying           |
+ kind       | character varying           |
  dob        | character varying           |
  created_at | timestamp without time zone | not null
  updated_at | timestamp without time zone | not null
@@ -170,9 +180,8 @@ Suppose we don't have a database backing our app.
 Just as we modeled objects when learning about object-oriented programming,
  we can model associations using the concept of "collection" properties on
  parent objects.
-After inspecting these examples, I hope you realize there's not much special
- about ActiveRecord associations other than the setters, getters, and
- persistence callbacks they provide.
+
+### Code along: In memory associations
 
 Let's start by modeling a `Person` with a plain Ruby object (a plain Ruby object
  is just an object that doesn't inherit directly from rails).
@@ -192,17 +201,17 @@ class Person
 end
 ```
 
-Next, let's define `Pet`. A pet has a `name` and a `species` when instantiated,
+Next, let's define `Pet`. A pet has a `name` and a `kind` when instantiated,
  and also has an `owner` property that we can access to set the pet's only
  `owner`.
 
 ```ruby
 class Pet
-  attr_reader :name, :species
+  attr_reader :name, :kind
   attr_accessor :owner
 
-  def initialize(name, species)
-    @name, @species = name, species
+  def initialize(name, kind)
+    @name, @kind = name, kind
     @owner = nil
   end
 end
@@ -218,26 +227,30 @@ The reason we do both is to have access to the associated object now matter
  whether we have a `Pet` or `Person` at hand.
 
 ```ruby
-jeff = Person.new("Jeff", "Horn")
+jane = Person.new("Jane", "Jones")
 lucky = Pet.new("Lucky", "cat")
 
-jeff.pets << lucky
-lucky.owner = jeff
+jane.pets << lucky
+lucky.owner = jane
 
-jeff.pets[0] == lucky
-lucky.owner == jeff
+jane.pets[0] == lucky
+lucky.owner == jane
 
 lucky.owner.pets[0] == lucky
 ```
 
 In the last few lines, we see that the object referenced as the first member of
- the `pets` collection on `jeff` is the same instance we added previously.
+ the `pets` collection on `jane` is the same instance we added previously.
 Additionally, we can see that always have access to associated objects no matter
  where we are in an access chain.
 
 Take a moment and digram an ERD for these object relationships.
 Is it any different from the ERD that associated `Pet` and `Person` before?
 What can we conclude about the usefulness of ERDs for modeling relationships?
+
+After inspecting these examples, I hope you realize there's not much special
+ about ActiveRecord associations other than the setters, getters, and
+ persistence callbacks they provide.
 
 ## Rails: `has_many`
 
@@ -270,13 +283,14 @@ Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
 1.  `Firm#clients.create`
 1.  `Firm#clients.create!`
 
-## Code along: `has_many` Methods
+### Lab: `has_many` Methods
 
-Each of you will research one method.
-Describe what the method does in your own words.
-Is it a setter, a getter, or something else?
-Then, give an example of another one-to-many relationship, where you would
- define `has_many`, and how you would use the method you just researched.
+Each squad will research a few Methods method.
+
+-   Describe what the method does.
+-   Is it a setter, a getter, or something else?
+-   Give an example of another one-to-many relationship, where you would define
+ `has_many`, and how you would use the method you just researched.
 
 ## Rails: `belongs_to`
 
@@ -309,11 +323,14 @@ Supposing a `Post` that `belongs_to :author`, the list of generated methods is:
 1.  `Post#create_author`
 1.  `Post#create_author!`
 
-## Code along: `belongs_to` Methods
+## Lab: `belongs_to` Methods
 
-Each of you will research one method.
-Describe what the method does in your own words.
-Is it a setter, a getter, or something else?
+Each squad will research one method.
+
+-   Describe what the method does.
+-   Is it a setter, a getter, or something else?
+-   Give an example of another one-to-many relationship, where you would define
+ `has_many`, and how you would use the method you just researched.
 
 ## Code along: Creating Associated Records
 
@@ -323,7 +340,7 @@ Open `app/models/person.rb` and add edit it.
 
 ```ruby
 class Person < ActiveRecord::Base
-  has_many :pets, inverse_of: :owner
+  has_many :pets, inverse_of: :owner, foreign_key: 'owner_id'
 end
 ```
 
@@ -331,45 +348,49 @@ It is best practice to include `inverse_of` options on each of our associations.
 It helps rails keep memory in-sync with changes in the database.
 In this case, `Pet` is a many-to-one relationship with `Person`, so we use the
  plural `:pets` and the singular `:owner`.
+Because we're not using the default name for the relationship, we need to pass
+ the `foreign_key` option.
 
 Next, create `app/models/pet.rb`.
 
 ```ruby
 class Pet < ActiveRecord::Base
-  belongs_to :owner, inverse_of: :pets
+  belongs_to :owner, inverse_of: :pets, class_name: 'Person'
 end
 ```
 
 In this case, we read our relationship in the other direction.
 `Person` is a one-to-many relationship with `Pet`, so we use the singular
  `:owner` and the plural `:pets`.
+Again, because we're not using the default name for the relationship, we need to
+ pass the `class_name` option.
 
-Since we've already completed our migration that adds `person_id` to the `pets`
+Since we've already completed our migration that adds `owner_id` to the `pets`
  table, we can use ActiveRecord association setter methods to create an
-  association between a person and a pet.
+ association between a person and a pet.
 
-Enter `rails db`. Query the `pets` table. It should be empty.
+Enter `rails db`. Query the `pets` table. The `owner_id` column should be empty.
 
-Exit and then enter `rails console`.
+Exit and enter the `rails console`.
 
 ```ruby
-jeff = Person.create!(given_name: "Jeffrey", surname: "Horn")
-lucky = Pet.create!(name: "Lucky", species: "cat")
+joan = Person.first
+blingo = Pet.forty_two
 
-jeff.pets << lucky
+joan.pets << blingo
 ```
 
 Exit and re-enter `rails db`. Query the `pets` table and the `person` table.
-The `person_id` in the `pets` table for the pet you just created should equal
- the `id` in the `people` table for the person you just created.
+The `owner_id` in the `pets` table for "Blingo" should equal
+ the `id` in the `people` table for "Joan".
 
 Exit and re-enter `rails console`.
 
 ```ruby
-lucky = Pet.last
-jeff = Person.last
+blingo = Pet.forty_two
+joan = Person.first
 
-lucky.person == jeff
+blingo.owner == joan
 ```
 
 The last line should return `true`.
