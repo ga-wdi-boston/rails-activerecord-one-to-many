@@ -2,7 +2,7 @@
 
 # Rails ActiveRecord: one-to-many relationships
 
-So far you've seen how to associate records with on another using foreign keys
+So far you've seen how to associate records with one another using foreign keys
  in a database.
 Just as we can use ActiveRecord to read, change, update, and delete data from
  our database, we can use ActiveRecord relationship methods to associate records
@@ -11,11 +11,11 @@ Just as we can use ActiveRecord to read, change, update, and delete data from
 ## Objectives
 
 -   Digram the database tables and Entity Relationship Diagram that describe a
- parent-child relationship.
--   Write a migration for a parent-child relationship.
+ one-to-many relationship.
+-   Write a migration for a one-to-many relationship.
 -   Associate plain Ruby objects with one another.
 -   Compare `has_many` and `belongs_to` to other macros, like `attr_accessor`.
--   Configure ActiveRecord to manage parent-child relationships using `has_many`
+-   Configure ActiveRecord to manage one-to-many relationships using `has_many`
  and `belongs_to`.
 -   Create associated records using the rails console.
 
@@ -23,9 +23,7 @@ Just as we can use ActiveRecord to read, change, update, and delete data from
 
 Fork, clone, branch (training), and `bundle install`.
 
-Next, create your database, migrate, and seed.
-
-Follow along with your instructor, closing your laptop if requested.
+Then create the database, migrate, and load example data.
 
 ## Entity Relationship Diagram (ERD)
 
@@ -33,61 +31,63 @@ It is often useful to organize our thoughts about the entities in our
  application before we generate models and migrations.
 We'll use a simplified diagram syntax that is derived from [UML](http://www.uml.org).
 
-**NOTE:** If you look into data modeling on your own, you might run across some
- terms that people in the rails community don't often use.
- These include describing relationships using plurals ("one-to-many",
-  "many-to-many", "many-to-one", etc.).
-Because rails uses common-language names for its relationship macros (`has_many`
- and `belongs_to`), these general terms are sometimes preferred since they are
- not loaded with the concept of "ownership".
-I will often refer to these as parent-child relationships since "one-to-many"
- relationships are the basis of hierarchical structures.
-Finally, "parent" objects can be thought of as "containers" or "collections",
- like folders in the file system.
+In Rails, the class that is on the "one" side of "one-to-many" uses the
+ `has_many` macro.
+The class on the "many" side uses `belongs_to`.
+These may be referred to as "parent-child" relationships since "one-to-many" can
+ be the basis of a hierarchy.
+Also, "parent" objects can be thought of as "containers" for "collections" of
+ "children", similar to folders in the file system.
 
 We'll list our entities in boxes and draw arrows denoting the relationships.
 We denote number on the end of the tails to communicate the type of relationship
  we are defining.
 
-### Code along: ERDs
+### Lab: Table relationships
 
 First, diagram the database schema for `people`, `cities`, and `pets`.
 Where are foreign keys stored? What are the names of the foreign key columns?
 
-Next, I'll show you the relationship between `Person` and `Pet`.
+### Code along: Person and Pet
+
+We'll look at the relationship between `Person` and `Pet`.
+
+### Lab: Person and City
+
 Then, you'll diagram the relationship between `Person` and `City`.
 What is the top-level container as modeled?
 Is this clearly a hierarchical series of relationships?
-
 Can we access `Pet` from `City`?
 
-## Code along: Migrations
+## Lab: Migrations
 
-**REVIEW:** Generate a migration for `pets`.
-`pets` should have a `name`, a `species`, and a `dob`.
+**REVIEW:** Generate a migration for `pets` using the first line of
+ `data/pets.csv` as attribute names.
 
 After you generate the migration, inspect it visually and if it looks right,
  run `rake db:migrate`.
- Next enter `rails db` and inspect the `pets` table with `\d pets`.
- Do the columns look as you'd expect? Your output should resemble:
+Next enter `rails db` and inspect the `pets` table with `\d pets`.
+
+Do the columns look as you'd expect? Your output should resemble:
 
 ```txt
                                      Table "public.pets"
    Column   |            Type             |                     Modifiers
 ------------+-----------------------------+---------------------------------------------------
  id         | integer                     | not null default nextval('pets_id_seq'::regclass)
- name       | character varying           |
+ born_on    | date                        |
  species    | character varying           |
- dob        | character varying           |
+ name       | character varying           |
  created_at | timestamp without time zone | not null
  updated_at | timestamp without time zone | not null
 Indexes:
     "pets_pkey" PRIMARY KEY, btree (id)
 ```
 
-**RESEARCH:** Write a migration to associate `people` with `pets`.
+**RESEARCH:** Write a migration to associate `pets` with `people`.
 Next, write a migration to associate `people` with `cities`.
-After writing each migration, inspect the migration and run `rake db:migrate`.
+After writing each migration, inspect the migration and then run `rake
+ db:migrate`.
 If you need to make changes, run `rake db:rollback`, edit the migration, and
  re-run the migrations.
 If you get too far ahead, you'll need to reset, or "nuke and pave",
@@ -95,7 +95,7 @@ If you get too far ahead, you'll need to reset, or "nuke and pave",
 To "nuke and pave":
 
 ```txt
-rake db:drop db:create db:migrate db:seed
+rake db:drop db:create db:migrate db:populate:all
 ```
 
 **NOTE:** There is more than one way to write association migrations.
@@ -123,12 +123,12 @@ table should resemble:
  dob        | character varying           |
  created_at | timestamp without time zone | not null
  updated_at | timestamp without time zone | not null
- person_id  | integer                     |
+ owner_id   | integer                     |
 Indexes:
     "pets_pkey" PRIMARY KEY, btree (id)
-    "index_pets_on_person_id" btree (person_id)
+    "index_pets_on_owner_id" btree (owner_id)
 Foreign-key constraints:
-    "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
+    "fk_rails_88e11d1ea7" FOREIGN KEY (owner_id) REFERENCES people(id)
 ```
 
 After running the migration to associate `cities` with `people`, the `people`
@@ -142,18 +142,21 @@ After running the migration to associate `cities` with `people`, the `people`
  surname     | character varying           |
  given_name  | character varying           |
  gender      | character varying           |
- dob         | character varying           |
+ height      | integer                     |
+ weight      | integer                     |
+ born_on     | date                        |
  created_at  | timestamp without time zone | not null
  updated_at  | timestamp without time zone | not null
- middle_name | character varying           |
- city_id    | integer                     |
+ hair_color  | character varying           |
+ eye_color   | character varying           |
+ born_in_id  | integer                     |
 Indexes:
     "people_pkey" PRIMARY KEY, btree (id)
-    "index_people_on_city_id" btree (city_id)
+    "index_people_on_born_in_id" btree (born_in_id)
 Foreign-key constraints:
-    "fk_rails_6f429ca703" FOREIGN KEY (city_id) REFERENCES citys(id)
+    "fk_rails_6f429ca703" FOREIGN KEY (born_in_id) REFERENCES cities(id)
 Referenced by:
-    TABLE "pets" CONSTRAINT "fk_rails_88e11d1ea7" FOREIGN KEY (person_id) REFERENCES people(id)
+    TABLE "pets" CONSTRAINT "fk_rails_88e11d1ea7" FOREIGN KEY (owner_id) REFERENCES people(id)
 ```
 
 ## Plain Ruby Associations
@@ -246,7 +249,7 @@ For example, if we have a `Firm` model and include `has_many :clients`, we will
 
 Just like `attr_accessor`, `has_many` is a macro that defines methods for us.
 You can think of the methods it defines as specialized setters and getters, as
- well as additional methods for dealing with database records.
+ well as additional methods for dealing with the database.
 A list of all the methods generated by `has_many` can be found in the [ActiveRecord::Associations::ClassMethods documentation](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many).
 
 Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
@@ -262,7 +265,7 @@ Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
 1.  `Firm#clients.empty?`
 1.  `Firm#clients.size`
 1.  `Firm#clients.find`
-1.  `Firm#clients.exists?(name: 'ACME')`
+1.  `Firm#clients.exists?`
 1.  `Firm#clients.build`
 1.  `Firm#clients.create`
 1.  `Firm#clients.create!`
@@ -280,7 +283,7 @@ Then, give an example of another one-to-many relationship, where you would
 Including `belongs_to` in an ActiveRecord model defines a series of methods on
  the model for accessing a **single** associated object.
 For example, if we have a `Post` model and include `belongs_to :author`, we will
- be able to get a particular post's author by `Post.find(1).author`.
+ be able to get a particular post's author by, e.g., `Post.find(1).author`.
 
 How do you decide where to put the `has_many` and `belongs_to` macros?
 Well, you can ask yourself a few questions:
@@ -291,8 +294,8 @@ Well, you can ask yourself a few questions:
 1.  Does the model's database table hold a foreign key column?
  If yes, include `belongs_to`.
 
-The "children" in parent-child relationships, or the "many" in one-to-many
- relationships hold the foreign key, and therefore will need `belongs_to` on the
+The "many" in one-to-many relationships, or the "children" in parent-child
+ relationships, hold the foreign key and will need `belongs_to` on the
  ActiveRecord model.
 
 `belongs_to` defines several methods for us. A list of the methods generated by
@@ -320,26 +323,26 @@ Open `app/models/person.rb` and add edit it.
 
 ```ruby
 class Person < ActiveRecord::Base
-  has_many :pets, inverse_of: :person
+  has_many :pets, inverse_of: :owner
 end
 ```
 
 It is best practice to include `inverse_of` options on each of our associations.
 It helps rails keep memory in-sync with changes in the database.
 In this case, `Pet` is a many-to-one relationship with `Person`, so we use the
- plural `:pets` and the singular `:person`.
+ plural `:pets` and the singular `:owner`.
 
 Next, create `app/models/pet.rb`.
 
 ```ruby
 class Pet < ActiveRecord::Base
-  belongs_to :person, inverse_of: :pets
+  belongs_to :owner, inverse_of: :pets
 end
 ```
 
 In this case, we read our relationship in the other direction.
 `Person` is a one-to-many relationship with `Pet`, so we use the singular
- `:person` and the plural `:pets`.
+ `:owner` and the plural `:pets`.
 
 Since we've already completed our migration that adds `person_id` to the `pets`
  table, we can use ActiveRecord association setter methods to create an
