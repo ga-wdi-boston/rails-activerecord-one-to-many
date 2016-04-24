@@ -23,7 +23,7 @@ Just as we can use ActiveRecord to read, change, update, and delete data from
 
 Fork, clone, branch (training), and `bundle install`.
 
-Then create the database, migrate, and load example data.
+Then create the database and run migrations.
 
 ## Relationship Diagram
 
