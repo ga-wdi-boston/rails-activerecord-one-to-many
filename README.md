@@ -58,12 +58,12 @@ We'll diagram the relationship between `Person` and `City`.
 -   Is this clearly a hierarchical series of relationships?
 -   Can we access `Pet` from `City`?
 
-## Lab: Migrations
+### Lab: Migrations
 
-**REVIEW:** Generate a migration for `pets` using the first line of
+**REVIEW:** Generate a model for `pets` using the first line of
  `data/pets.csv` as attribute names.
 
-After you generate the migration, inspect it visually and if it looks right,
+After you generate the model, inspect the migration visually and if it looks right,
  run `rake db:migrate`.
 Next enter `rails db` and inspect the `pets` table with `\d pets`.
 
