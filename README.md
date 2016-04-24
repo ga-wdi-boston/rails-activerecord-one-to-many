@@ -25,11 +25,9 @@ Fork, clone, branch (training), and `bundle install`.
 
 Then create the database, migrate, and load example data.
 
-## Entity Relationship Diagram (ERD)
+## Relationship Diagram
 
-It is often useful to organize our thoughts about the entities in our
- application before we generate models and migrations.
-We'll use a simplified diagram syntax that is derived from [UML](http://www.uml.org).
+Lets diagram relationships on a whiteboard.
 
 In Rails, the class that is on the "one" side of "one-to-many" uses the
  `has_many` macro.
@@ -60,12 +58,12 @@ We'll diagram the relationship between `Person` and `City`.
 -   Is this clearly a hierarchical series of relationships?
 -   Can we access `Pet` from `City`?
 
-## Lab: Migrations
+### Lab: Migrations
 
-**REVIEW:** Generate a migration for `pets` using the first line of
+**REVIEW:** Generate a model for `pets` using the first line of
  `data/pets.csv` as attribute names.
 
-After you generate the migration, inspect it visually and if it looks right,
+After you generate the model, inspect the migration visually and if it looks right,
  run `rake db:migrate`.
 Next enter `rails db` and inspect the `pets` table with `\d pets`.
 
@@ -244,9 +242,8 @@ In the last few lines, we see that the object referenced as the first member of
 Additionally, we can see that always have access to associated objects no matter
  where we are in an access chain.
 
-Take a moment and digram an ERD for these object relationships.
-Is it any different from the ERD that associated `Pet` and `Person` before?
-What can we conclude about the usefulness of ERDs for modeling relationships?
+Take a moment and diagram these object relationships.
+Is it any different from the diagram that associated `Pet` and `Person` before?
 
 After inspecting these examples, I hope you realize there's not much special
  about ActiveRecord associations other than the setters, getters, and
@@ -336,7 +333,7 @@ Each squad will research one method.
 
 We need to set up ActiveRecord to handle our one-to-many relationship from
  `Person` to `Pet`.
-Open `app/models/person.rb` and add edit it.
+Open `app/models/person.rb` and edit it.
 
 ```ruby
 class Person < ActiveRecord::Base
