@@ -327,7 +327,7 @@ Each squad will research one method.
 -   Describe what the method does.
 -   Is it a setter, a getter, or something else?
 -   Give an example of another one-to-many relationship, where you would define
- `has_many`, and how you would use the method you just researched.
+ `belongs_to`, and how you would use the method you just researched.
 
 ## Code along: Creating Associated Records
 
