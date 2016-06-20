@@ -20,11 +20,11 @@ Person.transaction do
   end
 end
 
-# Pet.transaction do
-#   CSV.foreach 'data/pets.csv', headers: true do |pet|
-#     Pet.create(pet.to_hash)
-#   end
-# end
+Pet.transaction do
+  CSV.foreach 'data/pets.csv', headers: true do |pet|
+    Pet.create(pet.to_hash)
+  end
+end
 
 Album.create([
   { title: '21', artist: 'Adele' },
