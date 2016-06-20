@@ -41,10 +41,17 @@ We'll list our entities in boxes and draw arrows denoting the relationships.
 We denote number on the end of the tails to communicate the type of relationship
  we are defining.
 
+### Discussion: Table relationships for Albums and Songs
+
+Firstly, lets discuss what the schema consists of for our Albums and Songs
+tables from the previous training. What would the foreign key be? Where would it
+be stored? What would the names of the foreign keys be?
+
 ### Lab: Table relationships
 
-First, diagram the database schema for `people`, `cities`, and `pets`.
-Where are foreign keys stored? What are the names of the foreign key columns?
+Now, take some time to diagram the database schema for `people`, `cities`, and
+`pets`. Where are foreign keys stored? What are the names of the foreign key
+columns?
 
 ### Code along: Person and Pet
 
