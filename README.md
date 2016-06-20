@@ -53,6 +53,10 @@ Now, take some time to diagram the database schema for `people`, `cities`, and
 `pets`. Where are foreign keys stored? What are the names of the foreign key
 columns?
 
+### Demo: Album and Songs
+
+Watch as we make a relationship for Album and Songs.
+
 ### Code along: Person and Pet
 
 We'll look at the relationship between `Person` and `Pet`.
@@ -70,9 +74,9 @@ We'll diagram the relationship between `Person` and `City`.
 **REVIEW:** Generate a model for `pets` using the first line of
  `data/pets.csv` as attribute names.
 
-After you generate the model, inspect the migration visually and if it looks right,
- run `rake db:migrate`.
-Next enter `rails db` and inspect the `pets` table with `\d pets`.
+After you generate the model, inspect the migration visually and if it looks
+right, run `rake db:migrate`. Next enter `rails db` and inspect the `pets` table
+with `\d pets`.
 
 Do the columns look as you'd expect? Your output should resemble:
 
@@ -93,7 +97,7 @@ Indexes:
 Load the data for people, cities, and pets using:
 
 ```sh
-rake db:populate:all
+rake db:seed
 ```
 
 **RESEARCH:** Write a migration to associate `pets` with `people` as `owner`.
@@ -106,8 +110,8 @@ If you get too far ahead, you'll need to reset, or "nuke and pave",
  your database after editing migrations.
 To "nuke and pave":
 
-```txt
-rake db:drop db:create db:migrate db:populate:all
+```sh
+rake db:drop db:create db:migrate db:seed
 ```
 
 There is more than one way to write association migrations.
@@ -162,8 +166,6 @@ After running the migration to associate `cities` with `people`, the `people`
  born_on     | date                        |
  created_at  | timestamp without time zone | not null
  updated_at  | timestamp without time zone | not null
- hair_color  | character varying           |
- eye_color   | character varying           |
  born_in_id  | integer                     |
 Indexes:
     "people_pkey" PRIMARY KEY, btree (id)
@@ -287,9 +289,9 @@ Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
 1.  `Firm#clients.create`
 1.  `Firm#clients.create!`
 
-### Lab: `has_many` Methods
+### Lab: Associations Methods
 
-Each squad will research a few Methods method.
+Each squad will research a few Associations methods.
 
 -   Describe what the method does.
 -   Is it a setter, a getter, or something else?
@@ -327,20 +329,18 @@ Supposing a `Post` that `belongs_to :author`, the list of generated methods is:
 1.  `Post#create_author`
 1.  `Post#create_author!`
 
-## Lab: `belongs_to` Methods
-
-Each squad will research one method.
-
--   Describe what the method does.
--   Is it a setter, a getter, or something else?
--   Give an example of another one-to-many relationship, where you would define
- `belongs_to`, and how you would use the method you just researched.
-
 ## Code along: Creating Associated Records
 
 We need to set up ActiveRecord to handle our one-to-many relationship from
- `Person` to `Pet`.
-Open `app/models/person.rb` and edit it.
+ `Person` to `Pet`. First we have to create a Pet Model (and table).
+
+ `bundle exec rails g model Pet born_on:string kind:string name:string`
+
+Then we have to migrate the newly create model:
+`bundle exec rake db:migrate`
+
+Once the model has been created and the migrate has been executed, Open
+`app/models/person.rb` and edit it.
 
 ```ruby
 class Person < ActiveRecord::Base
@@ -355,7 +355,7 @@ In this case, `Pet` is a many-to-one relationship with `Person`, so we use the
 Because we're not using the default name for the relationship, we need to pass
  the `foreign_key` option.
 
-Next, create `app/models/pet.rb`.
+Next, open `app/models/pet.rb`.
 
 ```ruby
 class Pet < ActiveRecord::Base
