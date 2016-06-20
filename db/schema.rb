@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160620141839) do
+ActiveRecord::Schema.define(version: 20160620205851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,9 +41,23 @@ ActiveRecord::Schema.define(version: 20160620141839) do
     t.integer  "height"
     t.integer  "weight"
     t.date     "born_on"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "home_town_id"
+  end
+
+  add_index "people", ["home_town_id"], name: "index_people_on_home_town_id", using: :btree
+
+  create_table "pets", force: :cascade do |t|
+    t.string   "born_on"
+    t.string   "kind"
+    t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "person_id"
   end
+
+  add_index "pets", ["person_id"], name: "index_pets_on_person_id", using: :btree
 
   create_table "songs", force: :cascade do |t|
     t.string   "title"
@@ -51,6 +65,12 @@ ActiveRecord::Schema.define(version: 20160620141839) do
     t.integer  "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "album_id"
   end
 
+  add_index "songs", ["album_id"], name: "index_songs_on_album_id", using: :btree
+
+  add_foreign_key "people", "cities", column: "home_town_id"
+  add_foreign_key "pets", "people"
+  add_foreign_key "songs", "albums"
 end

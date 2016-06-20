@@ -20,6 +20,14 @@ class Album # Albums have an artist, title and tracks
   def self.find_by_title(query)
     @@collection.select { |album| album.title == query }
   end
+
+  def tracks
+    @tracks
+  end
+
+  def tracks=(track)
+    @tracks = track
+  end
 end
 
 class Song
