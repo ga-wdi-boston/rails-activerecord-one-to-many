@@ -47,17 +47,17 @@ Firstly, lets discuss what the schema consists of for our Albums and Songs
 tables from the previous training. What would the foreign key be? Where would it
 be stored? What would the names of the foreign keys be?
 
+### Demo: Album and Songs
+
+Watch as we make a relationship for Album and Songs.
+
 ### Lab: Table relationships
 
 Now, take some time to diagram the database schema for `people`, `cities`, and
 `pets`. Where are foreign keys stored? What are the names of the foreign key
 columns?
 
-### Demo: Album and Songs
-
-Watch as we make a relationship for Album and Songs.
-
-### Code along: Person and Pet
+### Discussion: Person and Pet
 
 We'll look at the relationship between `Person` and `Pet`.
 
