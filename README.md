@@ -289,9 +289,9 @@ Supposing a `Firm` that `has_many :clients`, the list of generated methods is:
 1.  `Firm#clients.create`
 1.  `Firm#clients.create!`
 
-### Lab: Associations Methods
+### Lab: `has_many` Methods
 
-Each squad will research a few Associations methods.
+Each squad will research a few of the above methods.
 
 -   Describe what the method does.
 -   Is it a setter, a getter, or something else?
